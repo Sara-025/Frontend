@@ -1,0 +1,103 @@
+.container1 {
+    display: flex;
+    gap: 10px;
+    margin:5px;  
+  }
+  .container2 {
+    padding: 24px;
+    gap: 24px;
+    border-radius: 24px;
+    background-color: #9e9ea8; 
+    border-color: #1e33ba;
+    box-shadow: 0px 1px 0px 0px #0000001A;
+  }
+  .left{
+    margin-top: 16px; 
+    padding: 14px;
+    width: 520px;
+    height: 350px;
+    border-radius: 24px;
+    background-color: #d7d7e6; 
+
+  }
+  
+  .dataCard {
+    margin-top: 16px; 
+    width: 500px;
+    height: 400px;
+  }
+  
+ 
+  
+  .a, .b, .c {
+    width: 150px;
+    height: 90px;
+    min-width: 270px;
+    padding: 24px;
+    gap: 8px;
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: background 0.3s ease; 
+  }
+
+  .a, .c {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.24) 100%), #283fd6;
+    background-blend-mode: overlay;
+  }
+  
+  .b {
+    background: linear-gradient(0deg, #4763E4, #4763E4),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.4) 100%);
+    background-blend-mode: overlay;
+  }
+
+  .a:hover, .a:active,
+  .c:hover, .c:active {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.3) 100%), #1e33ba;
+  }
+  
+  .b:hover, .b:active {
+    background: linear-gradient(0deg, #5a75f0, #5a75f0),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.5) 100%);
+  }
+  .card {
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .top,
+  .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .title {
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+  }
+  
+  .icon {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .number {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .percentage_is_positive {
+    font-size: 16px;
+    color: lightgreen;
+  }
+  .percentage_is_negative {
+    font-size: 16px;
+    color: rgb(236, 14, 14);
+  }

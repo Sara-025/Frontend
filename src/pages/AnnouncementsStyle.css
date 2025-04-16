@@ -1,0 +1,147 @@
+.MainAnnonce {
+    display: flex;
+    flex-direction: column;
+    
+    
+}
+.annonce-title {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+.CreateAnnonce {
+    display: flex;
+    justify-content: end;
+    padding: 10px 40px 0 0 ;
+}
+.CreateAnnonce button {
+    padding: 20px 35px 20px 35px;
+    border: none;
+    background-color: #1c4ad7;
+    color: white;
+    font-weight: 600;
+    margin:0 0 20px 50px ;
+    border-radius: 16px;
+    box-shadow:0 4px 8px rgba(0, 0, 0, 0.2) ;
+
+    
+}
+.CreateAnnonce button:hover {
+    background-color: #1843c4;
+    box-shadow:2px 4px 8px rgba(0, 0, 0, 0.3) ;
+}
+.MainAnnonce .Annonce-Item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    margin: 10px 0 0 10px;
+    border: 1.5px solid #9d9d9db2;
+    padding: 8px 0 17px 20px;
+    border-radius: 25px ;
+    box-shadow:0 4px 8px rgba(0, 0, 0, 0.2) ;
+    cursor : pointer;
+    margin:  0 20px 20px 27px;
+    
+}
+.Annonce-Item:hover {
+    opacity: 0.6;
+    padding: 9px 0 10px 20px;
+    border: 1.5px solid gainsboro;
+
+}
+
+.MainAnnonce h1 {
+    color: #1C3D9E;
+    margin: 0 0 0px 14px;
+}
+.MainAnnonce h3 {
+    color: #1064c5;
+    margin-bottom: 8px;
+    margin-left: 4px;
+}
+.MainAnnonce p {
+    color: rgb(58, 57, 57);
+    margin-top: 3px;
+}
+.MainAnnonce span {
+    color: rgb(24, 24, 24);
+    font-weight: 600;
+}
+.ModalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .ModalContent {
+    background: white;
+    padding: 25px 15px 10px 15px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  .ModalContent div {
+    padding-bottom: 10px;
+  }
+  .ModalButtons {
+    padding-top: 20px;
+    display: flex;
+    justify-content: end;
+  }
+.ModalOverlay input {
+    padding: 10px 190px 10px 10px ;
+    border: 1px solid rgb(210, 204, 204);
+    border-radius: 8px;
+
+} 
+.ModalOverlay input:focus{
+    outline: none;
+    border: 1.5px solid #1064c5;
+
+} 
+.ModalOverlay h2 {
+    padding-bottom: 20px;
+    text-align: center;
+
+}
+.ModalOverlay p {
+    color: rgb(86, 86, 86);
+
+}
+.icon1 {
+color: #1C3D9E;
+
+}
+.CreateButton {
+    background-color: #1064c5;
+    color: white;
+    border-radius: 8px;
+    padding: 10px 25px 10px 25px;
+    box-shadow:0 4px 8px rgba(0, 0, 0, 0.2) ;
+}
+.CreateButton:hover{
+    background-color: #0b5ab4;
+    box-shadow:0 4px 8px rgba(0, 0, 0, 0.3) ;
+
+}
+.CloseButton {
+    background-color: #c51010;
+    color: white;
+    border-radius: 8px;
+    padding: 10px 25px 10px 25px;
+    margin-left: 10px;
+    box-shadow:0 4px 8px rgba(0, 0, 0, 0.2) ;
+}
+.CloseButton:hover {
+    background-color: #9f0b0b;
+    box-shadow:0 4px 8px rgba(0, 0, 0, 0.3) ;
+}

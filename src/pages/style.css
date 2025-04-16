@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Istok+Web:ital,wght@0,400;0,700;1,400;1,700&family=Jaldi:wght@400;700&display=swap');
+*{
+  margin: 0;
+  box-sizing: border-box;
+  padding: 0;
+
+}
+.wrapper {
+  width :600px;
+  height: 400px;
+  
+  border-radius:10px ;
+  padding:30px 40px ;
+  
+}
+.body{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+ 
+
+}
+.Logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 10px;
+  padding-right: 25px;
+
+}
+.Logo img {
+  width: 60px;
+  height: 55px;
+}
+.Logo h1 {
+  color: #234CC1;
+  font-family: "Istok Web", sans-serif;
+  font-weight: 700;
+  font-size: 35px;
+  padding-left: 10px;
+  line-height: 57px;
+}
+.loginText {
+  color: black;
+  font-family: "Inter", sans-serif;
+  font-size:16px;
+  text-align: center;
+  padding-bottom: 14px;
+  font-weight: 500;
+
+}
+.input-box {
+  margin-top: 15px; 
+  padding: 0px 45px;
+  display: flex;
+  flex-direction: column;
+  
+}
+.input-box p {
+  font-size: 13px;
+  font-weight: 400;
+  color: rgb(19, 19, 19);
+  padding-bottom: 5px;
+  font-family: "Inter", sans-serif;
+
+}
+.input-box input {
+  padding: 11px 150px 11px 20px;
+  border-radius: 10px;
+ 
+  
+}
+.input-box .correct-input:focus{
+  outline: none;
+  border-color: #5C73DB;
+}
+.forgot p {
+  color: black;
+  text-align: center;
+  text-decoration: none;
+  font-family: "Jaldi", sans-serif;
+}
+.btn {
+  display: flex;
+  
+}
+.forgot p:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.wrapper button {
+  padding: 11px 195px 11px 195px;
+  color: white;
+  background-color: #4763E4;
+  border: 1px solid rgb(157, 152, 152);
+  border-radius: 12px;
+  margin: 20px 47px;
+  font-family: "Inter", sans-serif;
+
+}
+.wrapper button:hover {
+  cursor: pointer;
+  opacity: 0.9;
+}
+.Back p {
+  color: black;
+  text-align: center;
+  font-family: "Jaldi", sans-serif;
+  cursor: pointer;
+}
+.Back p:hover {
+  text-decoration: underline;
+}
+.check-email-p {
+  color: black;
+  margin-top: 40px;
+  font-size: 20px;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  padding-left: 5px ;
+  border-left: 4px solid #234CC1;
+  width: 480px;
+  line-height: 28px;
+  margin-left: 10px;
+}
+.correctmessage {
+  padding-left: 45px;
+  color: rgb(22, 24, 23);
+  font-size: 600;
+ 
+}
+.errormessage {
+  padding-left: 45px;
+  color: rgb(199, 17, 17);
+  font-size: 600;
+}
+.error-input {
+  border: 1.4px solid rgb(205, 37, 37);
+  background-color: #fefefe;
+}
+.error-input:focus {
+  border: 2px solid rgb(205, 37, 37);
+  outline: none;
+}
+.correct-input {
+  border: 1.5px solid #E4E4E7;
+}
+
+
+

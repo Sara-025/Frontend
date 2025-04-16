@@ -1,0 +1,53 @@
+
+.imag {
+    position: relative;
+    border-radius: 16px 16px 0px 0px ;
+    display: block;
+} 
+  .image-text {
+    position: absolute;
+    bottom: 10px; 
+    left: 45%;
+    transform: translateX(-50%);
+    width: 40%;
+    background: rgba(255, 255, 255, 0.97); 
+    color: rgb(12, 11, 11);
+    padding: 10px;
+    border-radius: 15px;
+    text-align: left;
+  }
+  
+  .image-text h3,
+  .image-text p {
+    margin: 5px 0;
+  }
+  
+  .status {
+    font-weight: bold;
+  }
+  
+.Rouge {
+    color: rgb(255, 0, 38);
+    font-weight: 600;
+    padding-left: 18px;
+  }
+.Verre{
+    color: rgb(4, 148, 4);
+    font-weight: 600;
+    padding-left: 18px;
+  }
+  
+  .resolve-btn {
+    background: #1957dc;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    margin-top: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  .resolve-btn:hover {
+    background: #06359b;
+  }
