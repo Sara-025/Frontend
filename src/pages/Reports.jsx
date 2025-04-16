@@ -12,7 +12,7 @@ import SearchIcon from "@mui/icons-material/Search";
 const Reports = () => {
   const navigate = useNavigate();
   
-  // Store users in state so we can update the list
+ 
   const [users, setUsers] = useState([
     { id: 1, firstName: "Alexander", lastName: "Foley", phone: "+237 6 99 88 77 66", status: "Validé", location: "3RWJ+X5, Marsa Ben M'Hidi", email: "alexander.foley@mail.com", issueDate: "2022-06-21 14:30:25", image: image1 },
     { id: 2, firstName: "Alex", lastName: "Poley", phone: "+237 6 99 88 77 66", status: "Actif", location: "HGR2+994, N11, Tipaza" },

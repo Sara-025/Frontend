@@ -12,54 +12,17 @@ const App = () => {
   const [passwordError, setPasswordError] = useState(false);
   
   const navigate = useNavigate();
-  const handleRegister = async () => {
-    try {
-      const response = await fetch("http://localhost:3000/auth/admin-register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: "admin@admin.com", password: "abc" }),
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        setMessage("Admin registered successfully!");
-      } else {
-        setMessage(data.error || "Registration failed");
-      }
-    } catch (error) {
-      setMessage("Error connecting to server");
-    }
-  };
   
-    
   
-
-  const handleLogin = async () => {
+  const HandleLogin = async () => {
     setEmailError(!email);
     setPasswordError(!password);
 
     
 
-    try {
-      const response = await fetch("http://localhost:3000/auth/admin-login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        setMessage(`Login successful!`);
-        localStorage.setItem("token", data.token);
+  
         navigate("../index");
-      } else {
-        setMessage(data.error);
-        setEmailError(true);
-        setPasswordError(true);
-      }
-    } catch (error) {
-      setMessage("Error connecting to server");
-    }
+     
   };
 
   return (
@@ -82,8 +45,8 @@ const App = () => {
             <div className="input-box">
               <p>Email</p>
               <input
-                type="email"
-                placeholder="Email"
+                type="phone Number"
+                placeholder="phone number"
                 value={email}
                 onChange={(e) => { setEmail(e.target.value); setEmailError(false); }}
                 className={emailError ? "error-input" : "correct-input"}
@@ -114,7 +77,7 @@ const App = () => {
               {action === "Forgot password" ? (
                 <button onClick={() => setAction("check email ")}>Send</button>
               ) : (
-                <button onClick={handleLogin}>Login</button>
+                <button onClick={HandleLogin}>Login</button>
               )}
             </div>
             <div className='Back'>
