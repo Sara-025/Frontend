@@ -18,7 +18,7 @@
     margin: 10px;
   }
   
-  .report-field input {
+  .report-field input  {
     padding: 12px 250px 12px 10px;
     color: #222;
     border-radius: 7px;
@@ -47,14 +47,5 @@
     border-radius: 5px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
   }
-  i {
-    position: absolute;
-    right: 516px;
-    bottom:16.5% ;
-    font-size: 24px;
-    cursor: pointer;
-    
-  }
-  .image {
-    text-align:center;
-  }
+
+  

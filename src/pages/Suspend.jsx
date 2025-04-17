@@ -1,6 +1,7 @@
 import './SuspendStyle.css';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import ImageIcon from '@mui/icons-material/Image';
 
 const Suspend = () => {
   const location = useLocation();
@@ -61,8 +62,25 @@ const Suspend = () => {
     
           <div className="report-field">
             <p>Image Preview:</p>
-            <i class='bx bxs-image'></i>
-            <input onClick={navigateToImage}  className='image' value={"View Image"} readOnly />
+          
+            <button
+      onClick={navigateToImage}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        padding: '8px 310px 8px 10px',
+        border: '1.3px solid #E4E4E7',
+        borderRadius: '7px',
+        background: '#fff',
+        cursor: 'pointer',
+        gap: '8px'
+      }}
+    >
+      <ImageIcon />
+      View Image
+    </button>
+            
+    
           </div>
           </div>
         </div>
