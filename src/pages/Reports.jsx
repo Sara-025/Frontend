@@ -7,6 +7,16 @@ import {
   Box,
   InputAdornment,
 }from "@mui/material";
+import {
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Paper,
+  TableContainer
+} from "@mui/material";
+
 import SearchIcon from "@mui/icons-material/Search";
 
 const Reports = () => {
@@ -22,31 +32,13 @@ const Reports = () => {
 
   
   const [searchQuery, setSearchQuery] = useState("");
-  const [showModal, setShowModal] = useState(false);
-  const [userToDelete, setUserToDelete] = useState(null);
 
   // Function to navigate to the suspend page
   const navigateToSuspend = (user) => {
     navigate(`/Suspend?email=${encodeURIComponent(user.email)}&firstName=${encodeURIComponent(user.firstName)}&lastName=${encodeURIComponent(user.lastName)}&phone=${encodeURIComponent(user.phone)}&location=${encodeURIComponent(user.location)}&issueDate=${encodeURIComponent(user.issueDate)}&image=${encodeURIComponent(user.image)}`);
   };
-
-  // Function to open the modal before deleting
-  const openDeleteModal = (userId) => {
-    setUserToDelete(userId);
-    setShowModal(true);
-  };
-
-  // Function to confirm delete
-  const handleDelete = () => {
-    if (userToDelete !== null) {
-      setUsers(users.filter(user => user.id !== userToDelete));
-      setShowModal(false);
-      setUserToDelete(null);
-    }
-  };
-
   return (
-    <>
+    <div className="Reports-Main">
       
         {/* Search Bar */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 , paddingLeft : "30px" , paddingBottom:"10px" }}>
@@ -79,50 +71,46 @@ const Reports = () => {
 
         {/* Table */}
         <div>
-          <table>
-            <thead>
-              <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Phone</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users
-                .filter((user) => user.firstName.toLowerCase().includes(searchQuery.toLowerCase()))
-                .map((user) => (
-                  <tr key={user.id}>
-                    <td>{user.firstName}</td>
-                    <td>{user.lastName}</td>
-                    <td>{user.phone}</td>
-                    <td className={user.status === "Validé" ? "status-valide" : user.status === "Actif" ? "status-actif" : "status-inactif"}>
-                      {user.status}
-                    </td>
-                    <td>
-                      <button className="suspend" onClick={() => navigateToSuspend(user)}>Suspend</button>
-                      <button className="delete" >Duplicate</button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+        <TableContainer component={Paper} sx={{ maxWidth: "95%", mx: "auto", borderRadius: 2 ,boxShadow:" 0px 0px 4px 1px rgba(0, 0, 0, 0.3)" }}>
+  <Table>
+    <TableHead>
+      <TableRow sx={{ backgroundColor: "rgb(238, 238, 239)" }}>
+        <TableCell align="center" >First Name</TableCell>
+        <TableCell align="center">Last Name</TableCell>
+        <TableCell align="center">Phone</TableCell>
+        <TableCell align="center">Status</TableCell>
+        <TableCell align="center">Actions</TableCell>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {users
+        .filter((user) =>
+          user.firstName.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+        .map((user) => (
+          <TableRow key={user.id} hover>
+            <TableCell align="center">{user.firstName}</TableCell>
+            <TableCell align="center">{user.lastName}</TableCell>
+            <TableCell align="center">{user.phone}</TableCell>
+            <TableCell
+              align="center"
+              className={
+                user.status === "Validé" ? "status-valide" : user.status === "Actif" ? "status-actif" : "status-inactif"
+              }
+            >
+              {user.status}
+            </TableCell>
+            <TableCell align="center">
+              <button  className="suspend" onClick={() => navigateToSuspend(user)}> Suspend</button>
+              <button className="delete" > Duplicate</button>
+            </TableCell>
+          </TableRow>
+        ))}
+    </TableBody>
+  </Table>
+</TableContainer>
         </div> 
-        {showModal && (
-          <div className="modal-overlay">
-            <div className="modal">
-              <h3>Confirm Deletion</h3>
-              <p>Are you sure you want to delete this user?</p>
-              <div className="modal-buttons">
-                <button onClick={handleDelete} className="confirm">Yes, Delete</button>
-                <button onClick={() => setShowModal(false)} className="cancel">Cancel</button>
-              </div>
-            </div>
-          </div>
-        )}
-      
-    </>
+    </div>
   );
 };
 
