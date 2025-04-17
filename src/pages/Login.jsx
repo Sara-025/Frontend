@@ -43,7 +43,7 @@ const App = () => {
             <p className='loginText'>Please enter your administrator login credentials</p>
             <p className={emailError ? "errormessage" : "correctmessage"}>{message}</p>
             <div className="input-box">
-              <p>Email</p>
+              <p>Phone Number</p>
               <input
                 type="phone Number"
                 placeholder="phone number"
