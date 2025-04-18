@@ -1,7 +1,7 @@
 import React from 'react';
 import './SidebarPart.css'; 
 import Logo from "../assets/logo.png"
-import DashboardIcon from '@mui/icons-material/SpaceDashboard';
+import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
 import PeopleIcon from '@mui/icons-material/People';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LoginIcon from '@mui/icons-material/Login';
@@ -15,12 +15,12 @@ const Sidebar = () => {
   const currentPath = location.pathname;
 
   const menuItems = [
-    { icon: <DashboardIcon />, label: 'Dashboard', href: '/Home' },
+    { icon: <SpaceDashboardIcon />, label: 'Dashboard', href: '/Home' },
     { icon: <PeopleIcon />, label: 'Teams', href: '/Teams' },
     { icon: <ReportIcon />, label: 'Reports', href: '/Reports' },
     { icon: <CampaignIcon />, label: 'Announcements', href: '/Announcements' },
     { icon: <SettingsIcon />, label: 'Settings', href: '/Settings' },
-    { icon: <LoginIcon />, label: 'Login', href: '/Login' },
+    { icon: <LoginIcon />, label: 'Log Out', href: '/Login' },
     
   ];
 

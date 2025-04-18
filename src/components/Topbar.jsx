@@ -16,13 +16,16 @@ const Topbar = () => {
         left: 250, // Adjust to match sidebar width
         display: "flex",
         alignItems: "center",
+        borderRadius:"40px 40px 0 0",
         justifyContent: "space-between", // Spread items across
-        width: "calc(100% - 250px)", // Adjust width after sidebar
+        width: "calc(99% - 250px)", // Adjust width after sidebar
         height: "60px",
-        padding: "0 20px", // Add padding for spacing
+        padding: "0px 20px", // Add padding for spacing
+        margin:"20px 20px 20px 0px",
         backgroundColor: "#ffffff",
         zIndex: 1000,
-        boxShadow:"0px 0px 8px rgba(0, 0, 0, 0.2)" ,
+         
+        
 
       }}
     >

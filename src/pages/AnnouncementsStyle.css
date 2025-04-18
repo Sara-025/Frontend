@@ -51,12 +51,10 @@
 
 }
 
-.MainAnnonce h1 {
-    color: #1C3D9E;
-    margin: 0 0 0px 14px;
-}
+
 .MainAnnonce h3 {
-    color: #1064c5;
+    color: #3737ff;
+    
     margin-bottom: 8px;
     margin-left: 4px;
 }
@@ -118,11 +116,13 @@
 
 }
 .icon1 {
-color: #1C3D9E;
+color: #3737ff;
+
 
 }
 .CreateButton {
-    background-color: #1064c5;
+    background-color:    #3737ff;
+    
     color: white;
     border-radius: 8px;
     padding: 10px 25px 10px 25px;

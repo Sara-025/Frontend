@@ -5,15 +5,16 @@ import Topbar from "./Topbar";
 
 const Layout = ({ children }) => {
   return (
-    <Box sx={{ display: "flex", height: "100vh", width: "100vw", overflow: "hidden" }}>
+    <Box sx={{ display: "flex", height: "100vh", width: "100vw", overflow: "hidden" , backgroundColor:"#3737ff" }}>
       {/* Sidebar */}
       <Box
         sx={{
           width: 250,
-          flexShrink: 0,
+          flexShrink: 60,
           bgcolor: "primary.main",
           height: "100vh",
           position: "fixed",
+          
           zIndex: 1100,
         }}
       >
@@ -27,6 +28,8 @@ const Layout = ({ children }) => {
           ml: "250px",
           display: "flex",
           flexDirection: "column",
+          justifyContent:"center",
+          
           height: "100vh",
           overflow: "hidden",
         }}
@@ -34,25 +37,27 @@ const Layout = ({ children }) => {
         {/* Topbar */}
         <Box
           sx={{
-            height: 60,
+            height: 0,
             width: "100%",
             bgcolor: "#ffffff",
             position: "fixed",
             zIndex: 1000,
           }}
         >
-          <Topbar />
+          <Topbar  />
         </Box>
 
         {/* Page Content (Scrollable) */}
         <Box
           sx={{
             flexGrow: 1,
-            mt: "60px",
+            mt: "80px",
             p: 2,
             overflowY: "auto",
             overflowX: "auto",
-            width: "calc(100vw - 250px)",
+            width: "calc(99vw - 250px)",
+            backgroundColor:"white",
+            
           }}
         >
           {children}
