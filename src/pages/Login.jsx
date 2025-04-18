@@ -15,13 +15,7 @@ const App = () => {
   
   
   const HandleLogin = async () => {
-    setEmailError(!email);
-    setPasswordError(!password);
-
-    
-
-  
-        navigate("../index");
+        navigate("/Home");
      
   };
 
@@ -31,7 +25,7 @@ const App = () => {
         <div className='Logo'>
           <img src={logo} alt="Logo"/>
           <h1>FixSpot</h1>
-          <handleRegister />
+          
 
         </div>
         {action === "check email " ? (

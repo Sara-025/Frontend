@@ -1,6 +1,6 @@
 // src/App.js
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import Teams from "./pages/Teams";
 import Reports from "./pages/Reports";
@@ -12,10 +12,17 @@ import ImagePreview from "./pages/imagePreview";
 import Announcements from "./pages/Announcements";
 import Home from "./pages/Home";
 
-// Protected Route Component
+import { Navigate, useLocation } from "react-router-dom";
+
 const ProtectedRoute = ({ children }) => {
-  const token = localStorage.getItem("token"); // Check if the user is logged in
-  return token ? children : <Navigate to="/login" />;
+  const isAuthenticated = true; 
+  const location = useLocation();
+
+  return isAuthenticated ? (
+    children
+  ) : (
+    <Navigate to="/login" replace state={{ from: location }} />
+  );
 };
 
 function App() {
@@ -23,10 +30,10 @@ function App() {
     <SelectedItemProvider>
       <Router>
         <Routes>
-          {/* Always accessible login page */}
+          
           <Route path="/login" element={<Login />} />
 
-          {/* Protected routes (only accessible after login) */}
+         
           <Route
             path="/*"
             element={
@@ -42,7 +49,7 @@ function App() {
                     <Route path="/Locations" element={<Location />} />
                     <Route path="/imagePreview" element={<ImagePreview />} />
 
-                    {/* If user tries to access '/', redirect to teams */}
+                    
                     <Route path="/" element={<Navigate to="/teams" />} />
                   </Routes>
                 </Layout>
@@ -50,7 +57,7 @@ function App() {
             }
           />
 
-          {/* Catch-all: If user is not logged in and tries to access anything else, redirect */}
+          
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       </Router>
