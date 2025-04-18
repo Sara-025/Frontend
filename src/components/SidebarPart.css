@@ -1,38 +1,80 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
-
-body, html {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  overflow-x: auto; 
-  min-width: 800px;
-}
-
 .sidebar {
-  background: #234CC1;
-  height: 100vh;
   width: 250px;
+  height: 100vh;
+  background-color: #111827;
+  color: white;
   display: flex;
-  align-items: flex-start;
-  position: fixed;
   flex-direction: column;
-  top: 0;
-  left: 0;
+  padding: 20px;
 }
 
-.sidebar .ps-sidebar-container {
-  background: #234CC1;
-}
-
-.logo-container {
+.sidebar-header {
   display: flex;
   align-items: center;
-  gap: -3px;
-  height: 50px;
-  width: 250px;
-  
+  gap: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.sidebar-item:hover {
+  background-color: #1f2937; 
+}
+
+.icon {
+  font-size: 20px;
+}
+
+.label {
+  font-size: 14px;
+}
+.sidebar-item-link {
+  text-decoration: none;
+  color: inherit;        
+  display: block;
+}
+.sidebar-item-link:hover .sidebar-item {
+  background-color: #f0f0f0;
+  color: #1976d2;
+  border-radius: 8px;
+}
+.sidebar-item-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.sidebar-item {
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+/* Active item style */
+.sidebar-item-link.active .sidebar-item {
+  background-color: #1976d2; 
+  color: white;
+}
+
+.sidebar-item-link.active .icon,
+.sidebar-item-link.active .label {
+  color: white;
+}
 .logo {
   width: 70px;
   height: 70px;
@@ -49,47 +91,3 @@ body, html {
   
 
 }
-
-.submenu.active, .menu-item.active {
-  background-color: #1976d2;
-  color: #c6ddf4;
-}
-.sidebar-header {
-  padding-bottom: 10px;
-  
-}
-
-.submenu, .menu-item {
-  cursor: pointer;
-  color: white;
-  background-color: #234CC1;
-  font-size: 20px;
-}
-
-.submenu-title {
-  font-size: 16px;
-  font-weight: bold;
-  color: #ffffff;
-  padding-left: 10px;
-}
-
-.custom-submenu .ps-menu-button svg {
-  fill: #ffffff;
-  stroke: #ffffff;
-}
-
-.custom-submenu .ps-menu-button span {
-  color: #ffffff;
-}
-.menu-item:hover {
-  background-color: blue !important;
-  color: #d02525 !important; /* Or whatever your default text color is */
-}
-
-/* Optional: prevent icon/text color changes inside */
-.menu-item:hover .ps-menu-icon,
-.menu-item:hover .ps-menu-label {
-  color: rgb(38, 0, 255) !important;
-  
-}
-

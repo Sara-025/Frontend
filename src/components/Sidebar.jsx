@@ -1,60 +1,55 @@
-import React, { useEffect, useState, useContext } from "react";
-import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Link, useLocation } from "react-router-dom";
-import logo from "../assets/logo.png";
-import "./SidebarPart.css";
-import { Typography } from "@mui/material";
-import { SelectedItemContext } from "../context/SelectedItemContext"; 
-import GroupsIcon from '@mui/icons-material/Groups';
-import HomeIcon from '@mui/icons-material/Home';
-import CampaignIcon from '@mui/icons-material/Campaign';
+import React from 'react';
+import './SidebarPart.css'; 
+import Logo from "../assets/logo.png"
+import DashboardIcon from '@mui/icons-material/SpaceDashboard';
+import PeopleIcon from '@mui/icons-material/People';
+import SettingsIcon from '@mui/icons-material/Settings';
+import LoginIcon from '@mui/icons-material/Login';
 import ReportIcon from '@mui/icons-material/Report';
+import CampaignIcon from '@mui/icons-material/Campaign';
+import { Link, useLocation } from 'react-router-dom';
 
-function Sidebarpart() {
-  const location = useLocation(); 
-  const [selected, setSelected] = useState(location.pathname); 
-  const { setSelectedItem } = useContext(SelectedItemContext); 
 
-  useEffect(() => {
-    setSelected(location.pathname);
-  }, [location.pathname]);
+const Sidebar = () => {
+  const location = useLocation();
+  const currentPath = location.pathname;
 
-  const Item = ({ title, to, hierarchy, icon }) => {
-    return (
-      <MenuItem
-        active={selected === to}
-        style={{ color: "#ffffff" }}
-        onClick={() => {
-          setSelected(to);
-          setSelectedItem({ title, hierarchy });
-        }}
-        icon={icon}
-        className={`menu-item ${selected === to ? "active" : ""}`}
-      >
-        <Link className="menu-hov"  to={to} style={{ textDecoration: "none", color: "inherit" }}>
-          <Typography>{title}</Typography>
-        </Link>
-      </MenuItem>
-    );
-  };
+  const menuItems = [
+    { icon: <DashboardIcon />, label: 'Dashboard', href: '/Home' },
+    { icon: <PeopleIcon />, label: 'Teams', href: '/Teams' },
+    { icon: <ReportIcon />, label: 'Reports', href: '/Reports' },
+    { icon: <CampaignIcon />, label: 'Announcements', href: '/Announcements' },
+    { icon: <SettingsIcon />, label: 'Settings', href: '/Settings' },
+    { icon: <LoginIcon />, label: 'Login', href: '/Login' },
+    
+  ];
 
   return (
-    <Sidebar className="sidebar">
+    <div className="sidebar">
       <div className="sidebar-header">
-        <div className="logo-container">
-          <img src={logo} alt="logo" className="logo" />
+       
+        <img src={Logo} alt="logo" className="logo" />
           <h5 className="fixSpot">FixSpot</h5>
-        </div>
       </div>
-
-      <Menu>
-        <Item title="Home" to="/home" hierarchy="Home" icon={<HomeIcon />} />
-        <Item title="Reports" to="/reports" hierarchy="Reports" icon={<ReportIcon />} />
-        <Item title="Teams" to="/teams" hierarchy="Teams" icon={<GroupsIcon />} />
-        <Item title="Announcements" to="/announcements" hierarchy="Announcements" icon={<CampaignIcon />} />
-      </Menu>
-    </Sidebar>
+      <div className="sidebar-menu">
+        {menuItems.map((item, index) => {
+          const isActive = currentPath === item.href;
+          return (
+            <Link
+              to={item.href}
+              key={index}
+              className={`sidebar-item-link ${isActive ? 'active' : ''}`}
+            >
+              <div className="sidebar-item">
+                <span className="icon">{item.icon}</span>
+                <span className="label">{item.label}</span>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+    </div>
   );
-}
+};
 
-export default Sidebarpart;
+export default Sidebar;
