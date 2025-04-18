@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './style.css';
+import './Login.css';
 import logo from '../assets/5892970150209111129_120-removebg-preview.png';
 import { useNavigate } from "react-router-dom";
 
@@ -15,10 +15,9 @@ const App = () => {
   
   
   const HandleLogin = async () => {
-        navigate("/Home");
-     
-  };
-
+      localStorage.setItem("adminToken", "sample-token");
+      navigate("/home");
+    };
   return (
     <div className='body'>
       <div className="wrapper">

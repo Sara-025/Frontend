@@ -77,7 +77,9 @@
 }
 .forgot p {
   color: black;
-  text-align: center;
+  text-align: end;
+  padding-right: 50px;
+  padding-top: 8px;
   text-decoration: none;
   font-family: "Jaldi", sans-serif;
 }
