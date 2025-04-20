@@ -41,7 +41,7 @@ const Reports = () => {
     <div className="Reports-Main">
       
         {/* Search Bar */}
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 , paddingLeft : "30px" , paddingBottom:"10px" }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 , paddingLeft : "30px" , paddingBottom:"10px",borderRadius:"30px", }}>
         <TextField
           label="Search"
           variant="outlined"
@@ -49,9 +49,9 @@ const Reports = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           sx={{
-            width: "900px",
+            width: "930px",
             height: "48px",
-            borderRadius:"20px",
+            borderRadius:"30px",
             
             "& .MuiOutlinedInput-root": {
               "& fieldset": { borderColor: "#4763E4" },
@@ -71,10 +71,10 @@ const Reports = () => {
 
         {/* Table */}
         <div>
-        <TableContainer component={Paper} sx={{ maxWidth: "95%", mx: "auto", borderRadius: 2 ,boxShadow:" 0px 0px 4px 1px rgba(0, 0, 0, 0.3)" }}>
+        <TableContainer component={Paper} sx={{ maxWidth: "100%", mx: "auto", borderRadius: 2  }}>
   <Table>
     <TableHead>
-      <TableRow sx={{ backgroundColor: "rgb(238, 238, 239)" }}>
+      <TableRow sx={{ backgroundColor: "rgb(255, 255, 255)" }}>
         <TableCell align="center" >First Name</TableCell>
         <TableCell align="center">Last Name</TableCell>
         <TableCell align="center">Phone</TableCell>

@@ -24,6 +24,7 @@
   flex-direction: column;
   gap: 10px;
   padding-left: 10px;
+  
 }
 
 .sidebar-item {
@@ -68,21 +69,36 @@
 }
 
 .sidebar-item {
-  padding: 10px 15px;
-  border-radius: 60px 0 0 60px;
+  padding: 6px 25px;
+  border-radius:60px;
+  margin-right: 10px;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.3);
   transition: background-color 0.3s ease;
+  
 }
 
 /* Active item style */
 .sidebar-item-link.active .sidebar-item {
   background-color: #fefefe; 
+<<<<<<< Updated upstream
   color: #1886e7;
+=======
+  color: #4141f7;
+  border-radius:60px 0px 0 60px;
+  margin-right: 0px;
+  
+>>>>>>> Stashed changes
   
 }
 
 .sidebar-item-link.active .icon,
 .sidebar-item-link.active .label {
+<<<<<<< Updated upstream
   color: #1886e7  ;
+=======
+  color: #3737ff  ;
+
+>>>>>>> Stashed changes
 }
 .logo {
   width: 70px;

@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
 .MainAnnonce {
     display: flex;
     flex-direction: column;
+    
     
     
 }
@@ -57,14 +60,18 @@
     
     margin-bottom: 8px;
     margin-left: 4px;
+    font-family: "Montserrat", sans-serif;
 }
 .MainAnnonce p {
-    color: rgb(58, 57, 57);
+    color: rgb(14, 13, 13);
     margin-top: 3px;
+    font-family:'Times New Roman', Times, serif;
+    
 }
 .MainAnnonce span {
     color: rgb(24, 24, 24);
     font-weight: 600;
+    
 }
 .ModalOverlay {
     position: fixed;
