@@ -5,7 +5,7 @@ import Topbar from "./Topbar";
 
 const Layout = ({ children }) => {
   return (
-    <Box sx={{ display: "flex", height: "100vh", width: "100vw", overflow: "hidden" , backgroundColor:"#3737ff" }}>
+    <Box sx={{ display: "flex", height: "100vh", width: "100vw", overflow: "hidden" , backgroundColor:"#1886e7" }}>
       {/* Sidebar */}
       <Box
         sx={{

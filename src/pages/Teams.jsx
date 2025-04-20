@@ -27,7 +27,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
 
-// Initial data for teams
 const initialTeams = [
   {
     id: 1,
