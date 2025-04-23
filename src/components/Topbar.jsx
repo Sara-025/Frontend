@@ -1,12 +1,18 @@
 // src/components/Topbar.js
 import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { Box, IconButton, Typography } from "@mui/material";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import footer from "../assets/Footer.png";
+import footer from "../assets/Ellipse 159.png";
 import { SelectedItemContext } from "../context/SelectedItemContext"; // Import the context
 
 const Topbar = () => {
   const { selectedItem } = useContext(SelectedItemContext); // Access the context
+  const navigate = useNavigate();
+  const handleToSettings = () => {
+    navigate("/Profile");
+
+  }
 
   return (
     <Box
@@ -40,6 +46,30 @@ const Topbar = () => {
         <IconButton>
           <NotificationsOutlinedIcon />
         </IconButton>
+         {/* Footer Image */}
+         <div style={{
+          display:"flex",
+          alignItems:"center",
+          marginRight:"10px"
+         }}>
+         <img
+          src={footer}
+          alt="footer"
+          onClick={handleToSettings}
+          style={{
+            width: "30px",
+            height: "auto",
+            marginLeft: "10px",
+            marginRight:"5px",
+            cursor:"pointer"
+            
+          }}
+        />
+        <h4 style={{
+          fontSize:"15px",
+          fontWeight:"600",
+        }}>Ramesh</h4>
+        </div>
 
         
       </Box>
