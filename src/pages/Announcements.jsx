@@ -8,9 +8,9 @@ import {
   DialogActions,
   TextField,
   Button,
-  Typography
+  FormControlLabel,
+  Checkbox
 } from '@mui/material';
-
 
 const Announcements = () => {
   const [annonces, setAnnonces] = useState([
@@ -20,6 +20,7 @@ const Announcements = () => {
       date: "February 28, 2025",
       description:
         "A water outage has been reported in some areas due to maintenance work. Please conserve water until service is restored.",
+      isGlobal: false,
     },
     {
       id: 2,
@@ -27,43 +28,49 @@ const Announcements = () => {
       date: "February 28, 2025",
       description:
         "A water outage has been reported in some areas due to maintenance work. Please conserve water until service is restored.",
-    },{
+      isGlobal: false,
+    },
+    {
       id: 3,
       title: "Attention: Water Outage",
       date: "February 28, 2025",
       description:
         "A water outage has been reported in some areas due to maintenance work. Please conserve water until service is restored.",
-    },{
+      isGlobal: false,
+    },
+    {
       id: 4,
       title: "Attention: Water Outage",
       date: "February 28, 2025",
       description:
         "A water outage has been reported in some areas due to maintenance work. Please conserve water until service is restored.",
-    },{
+      isGlobal: false,
+    },
+    {
       id: 5,
       title: "Attention: Water Outage",
       date: "February 28, 2025",
       description:
         "A water outage has been reported in some areas due to maintenance work. Please conserve water until service is restored.",
+      isGlobal: false,
     },
-    
   ]);
 
   const [showAnnonce, setShowAnnonce] = useState(false);
   const [newTitle, setNewTitle] = useState("");
-  const [newDate, setNewDate] = useState("");
   const [newDescription, setNewDescription] = useState("");
+  const [isGlobalRegion, setIsGlobalRegion] = useState(false); 
 
   const openCreateAnnonce = () => setShowAnnonce(true);
   const closeCreateAnnonce = () => {
     setShowAnnonce(false);
     setNewTitle("");
-    setNewDate("");
     setNewDescription("");
+    setIsGlobalRegion(false); 
   };
 
   const handleCreateAnnonce = () => {
-    if (!newTitle || !newDate || !newDescription) {
+    if (!newTitle || !newDescription) {
       alert("Please fill out all fields.");
       return;
     }
@@ -71,8 +78,9 @@ const Announcements = () => {
     const newAnnonce = {
       id: Date.now(),
       title: newTitle,
-      date: newDate,
+      date: "", 
       description: newDescription,
+      isGlobal: isGlobalRegion, 
     };
 
     setAnnonces([newAnnonce, ...annonces]);
@@ -93,6 +101,7 @@ const Announcements = () => {
                 <span>Date :</span> {annonce.date}
               </p>
               <p>{annonce.description}</p>
+              {annonce.isGlobal && <p style={{color:"#3737ff"}}><strong>This announcement is global</strong></p>}
             </div>
           ))}
         </div>
@@ -115,19 +124,22 @@ const Announcements = () => {
           />
           <TextField
             margin="dense"
-            label="Region"
-            fullWidth
-            value={newDate}
-            onChange={(e) => setNewDate(e.target.value)}
-          />
-          <TextField
-            margin="dense"
             label="Description"
             fullWidth
             multiline
             minRows={3}
             value={newDescription}
             onChange={(e) => setNewDescription(e.target.value)}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={isGlobalRegion}
+                onChange={(e) => setIsGlobalRegion(e.target.checked)}
+                color="primary"
+              />
+            }
+            label="Is this announcement global?"
           />
         </DialogContent>
         <DialogActions>

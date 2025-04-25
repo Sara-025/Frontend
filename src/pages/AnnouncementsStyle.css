@@ -2,10 +2,7 @@
 
 .MainAnnonce {
     display: flex;
-    flex-direction: column;
-    
-    
-    
+    flex-direction: column;   
 }
 .annonce-title {
     display: flex;
@@ -18,7 +15,7 @@
     padding: 10px 40px 0 0 ;
 }
 .CreateAnnonce button {
-    padding: 20px 35px 20px 35px;
+    padding: 15px 35px 15px 35px;
     border: none;
     background-color: #1c4ad7;
     color: white;
@@ -57,7 +54,7 @@
 
 .MainAnnonce h3 {
     color: #3737ff;
-    
+    font-weight: 600;
     margin-bottom: 8px;
     margin-left: 4px;
     font-family: "Montserrat", sans-serif;
@@ -126,29 +123,4 @@
 color: #3737ff;
 
 
-}
-.CreateButton {
-    background-color:    #3737ff;
-    
-    color: white;
-    border-radius: 8px;
-    padding: 10px 25px 10px 25px;
-    box-shadow:0 4px 8px rgba(0, 0, 0, 0.2) ;
-}
-.CreateButton:hover{
-    background-color: #0b5ab4;
-    box-shadow:0 4px 8px rgba(0, 0, 0, 0.3) ;
-
-}
-.CloseButton {
-    background-color: #c51010;
-    color: white;
-    border-radius: 8px;
-    padding: 10px 25px 10px 25px;
-    margin-left: 10px;
-    box-shadow:0 4px 8px rgba(0, 0, 0, 0.2) ;
-}
-.CloseButton:hover {
-    background-color: #9f0b0b;
-    box-shadow:0 4px 8px rgba(0, 0, 0, 0.3) ;
 }

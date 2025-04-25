@@ -1,0 +1,94 @@
+.SettingsMain{
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+.TopItem{
+    display: flex;
+    align-items: center;
+    
+}
+.ProfileIcon {
+    color: rgb(205, 205, 205);
+    margin-right: 10px;
+    margin-left: 10px;
+    background-color: white;
+    font-size: 30px;
+}
+.TopItem p {
+   color:#1886e7 ;
+   font-weight: 600;
+   font-size: 22px; 
+}
+.Profile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px;
+    border: 1.5px solid rgb(255, 255, 255);
+    background-color: rgb(255, 255, 255);
+    
+
+    
+}
+.Profile h4{
+    font-weight: 600;
+    font-size: 20px;
+    color: rgb(23, 23, 23);
+
+}
+.Profile p{
+    color: rgb(87, 86, 86);
+   
+}
+
+.ProfileDetials{
+    padding: 20px;
+    border: 1.5px solid white;
+    background-color: white;
+    box-shadow: 0px 1px 4px rgba(0,0,0,0.2) ;
+    display: flex;
+    flex-direction:row;
+    border-radius: 10px;
+    
+
+}
+.ProfileItem {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    
+}
+.ProfileItem input {
+    width:99%;
+    padding:10px 0px 10px 20px  ;
+    border: 1.5px solid rgb(249, 248, 248);
+    margin-bottom: 20px;
+    color: rgb(85, 82, 82);
+    background-color: #f9f8f8;
+    border-radius: 15px;
+    outline: none;
+    
+
+}
+.ProfileP{ 
+    width: 30%;
+}
+
+.ProfileP p {
+    color: rgb(97, 96, 96);
+    padding: 12px 0px 30px 0 ;
+    
+
+}
+.ProfileMain {
+    padding: 10px;
+    border: 1.5px solid white;
+    background: white;
+    margin-top: 10px;
+}
+
+
+
+
+

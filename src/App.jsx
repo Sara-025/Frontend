@@ -11,6 +11,7 @@ import ImagePreview from "./pages/imagePreview";
 import Announcements from "./pages/Announcements";
 import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoute"; 
+import  Settings from "./pages/Settings";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
                     <Route path="/announcements" element={<Announcements />} />
                     <Route path="/teams" element={<Teams />} />
                     <Route path="/reports" element={<Reports />} />
+                    <Route path="/settings" element={<Settings />} />
                     <Route path="/suspend" element={<Suspend />} />
                     <Route path="/locations" element={<Location />} />
                     <Route path="/imagePreview" element={<ImagePreview />} />

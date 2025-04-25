@@ -56,7 +56,7 @@ const Layout = ({ children }) => {
             overflowY: "auto",
             overflowX: "auto",
             width: "calc(99vw - 250px)",
-            backgroundColor:"white",
+            backgroundColor:"#FAFAFA",
             
           }}
         >

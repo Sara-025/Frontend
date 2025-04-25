@@ -3,14 +3,14 @@ import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, IconButton, Typography } from "@mui/material";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import footer from "../assets/Ellipse 159.png";
+import footer from "../assets/c79a37e13ef14be556b51143bcbb1b01.jpg";
 import { SelectedItemContext } from "../context/SelectedItemContext"; // Import the context
 
 const Topbar = () => {
   const { selectedItem } = useContext(SelectedItemContext); // Access the context
   const navigate = useNavigate();
   const handleToSettings = () => {
-    navigate("/Profile");
+    navigate("/Settings");
 
   }
 
@@ -28,7 +28,7 @@ const Topbar = () => {
         height: "70px",
         padding: "0px 20px", // Add padding for spacing
         margin:"10px 20px 20px 0px",
-        backgroundColor: "#ffffff",
+        backgroundColor: "#FAFAFA",
         zIndex: 1000,
          
         
@@ -42,15 +42,11 @@ const Topbar = () => {
 
       {/* Right Section */}
       <Box sx={{ display: "flex", alignItems: "center" }}>
-        {/* Notifications Icon */}
-        <IconButton>
-          <NotificationsOutlinedIcon />
-        </IconButton>
          {/* Footer Image */}
          <div style={{
           display:"flex",
           alignItems:"center",
-          marginRight:"10px"
+          marginRight:"20px"
          }}>
          <img
           src={footer}
@@ -60,8 +56,10 @@ const Topbar = () => {
             width: "30px",
             height: "auto",
             marginLeft: "10px",
-            marginRight:"5px",
-            cursor:"pointer"
+            marginRight:"10px",
+            cursor:"pointer",
+            borderRadius:"50px", 
+            border:"2px solid rgb(4, 113, 209) "
             
           }}
         />
