@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Login.css';
 import logo from '../assets/5892970150209111129_120-removebg-preview.png';
 import { useNavigate } from "react-router-dom";
-
+import api from '../api/axios'; 
 const App = () => {
   const [action, setAction] = useState(" ");
   const [email, setEmail] = useState("");
@@ -15,9 +15,35 @@ const App = () => {
   
   
   const HandleLogin = async () => {
-      localStorage.setItem("adminToken", "sample-token");
+    setMessage("");
+    setEmailError(false);
+    setPasswordError(false);
+  
+    try {
+      const response = await api.post('/login', {
+        email,
+        password,
+      });
+  
+      // Assuming the backend returns a token and a success message
+      const { token } = response.data;
+  
+      // Save token and navigate
+      localStorage.setItem("adminToken", token);
       navigate("/home");
-    };
+    } catch (error) {
+      if (error.response) {
+        const errorMsg = error.response.data.message || "Login failed";
+        setMessage(errorMsg);
+        setEmailError(true);
+        setPasswordError(true);
+      } else {
+        setMessage("Server error. Please try again.");
+        setEmailError(true);
+        setPasswordError(true);
+      }
+    }
+  };
   return (
     <div className='body'>
       <div className="wrapper">
