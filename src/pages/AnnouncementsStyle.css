@@ -23,7 +23,7 @@
     margin:0 0 20px 50px ;
     border-radius: 16px;
     box-shadow:0 4px 8px rgba(0, 0, 0, 0.2) ;
-
+    cursor: pointer;
     
 }
 .CreateAnnonce button:hover {
@@ -35,25 +35,14 @@
     flex-direction: column;
     justify-content: center;
     align-content: center;
-    margin: 10px 0 0 10px;
     border: 1.5px solid #9d9d9db2;
     padding: 8px 0 17px 20px;
     border-radius: 25px ;
     box-shadow:0 4px 8px rgba(0, 0, 0, 0.2) ;
-    cursor : pointer;
-    margin:  0 20px 20px 27px;
-    
+    margin:  0 20px 20px 27px;  
 }
-.Annonce-Item:hover {
-    opacity: 0.6;
-    padding: 9px 0 10px 20px;
-    border: 1.5px solid gainsboro;
-
-}
-
-
 .MainAnnonce h3 {
-    color: #3737ff;
+    color:#1886e7;
     font-weight: 600;
     margin-bottom: 8px;
     margin-left: 4px;
@@ -117,10 +106,7 @@
 }
 .ModalOverlay p {
     color: rgb(86, 86, 86);
-
 }
 .icon1 {
-color: #3737ff;
-
-
+color: #0d7adb;
 }

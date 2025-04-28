@@ -17,7 +17,7 @@ interface RevenueCardProps {
 
 export const RevenueCard: React.FC<RevenueCardProps> = ({ amount, percentage, isUp, trendLabel }) => {
   return (
-    <Card className="@container/card bg-sky-100 hover:bg-sky-200 active:bg-sky-300 transition-colors duration-300 cursor-pointer">
+    <Card className="@container/card bg-blue-200  cursor-pointer">
       <CardHeader className="flex items-center justify-start space-x-4 relative left-4 top-2">
         <CardDescription>Total Revenue</CardDescription>
         <CardTitle className="text-2xl font-semibold tabular-nums text-center">
@@ -60,7 +60,7 @@ interface NewUsersCardProps {
   
   export const NewUsersCard: React.FC<NewUsersCardProps> = ({ amount, percentage, isUp, trendLabel, subtitle }) => {
     return (
-      <Card className="@container/card bg-sky-100 hover:bg-sky-200 active:bg-sky-300 transition-colors duration-300 cursor-pointer">
+      <Card className="@container/card bg-blue-200  cursor-pointer">
         <CardHeader className="flex items-center justify-start space-x-4 relative left-4 top-2">
           <CardDescription>New Users</CardDescription> 
           <CardTitle className="text-2xl font-semibold tabular-nums">
@@ -104,7 +104,7 @@ interface ActiveUsersCardProps {
 
 export const ActiveUsersCard: React.FC<ActiveUsersCardProps> = ({ amount, percentage, isUp, trendLabel, subtitle }) => {
   return (
-    <Card className="@container/card bg-sky-100 hover:bg-sky-200 active:bg-sky-300 transition-colors duration-300 cursor-pointer">
+    <Card className="@container/card bg-blue-200  cursor-pointer">
       <CardHeader className="flex items-center justify-start space-x-4 relative left-4 top-2">
         <CardDescription>Active Users</CardDescription> 
         <CardTitle className="text-2xl font-semibold tabular-nums text-center">
@@ -147,7 +147,7 @@ interface ActiveTeamsCardProps {
 
 export const ActiveTeamsCard: React.FC<ActiveTeamsCardProps> = ({ percentage, trendLabel, subtitle, isUp }) => {
   return (
-    <Card className="@container/card bg-sky-100 hover:bg-sky-200 active:bg-sky-300 transition-colors duration-300 cursor-pointer">
+    <Card className="@container/card bg-blue-200  cursor-pointer">
       <CardHeader className="flex items-center justify-start space-x-4 relative left-4 top-2">
         <CardDescription>Active Teams</CardDescription> {/* Static title */}
         <CardTitle className="text-2xl font-semibold tabular-nums text-center">

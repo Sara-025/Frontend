@@ -2,56 +2,56 @@ import React, { useState } from 'react';
 import './Login.css';
 import logo from '../assets/5892970150209111129_120-removebg-preview.png';
 import { useNavigate } from "react-router-dom";
-import api from '../api/axios'; 
+import axios from 'axios';
+
 const App = () => {
   const [action, setAction] = useState(" ");
-  const [email, setEmail] = useState("");
+  const [phonenumber, setPhoneNumber] = useState(""); // renamed for clarity
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  const [emailError, setEmailError] = useState(false);
+  const [phoneError, setPhoneError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-  
+
   const navigate = useNavigate();
-  
-  
+
   const HandleLogin = async () => {
     setMessage("");
-    setEmailError(false);
+    setPhoneError(false);
     setPasswordError(false);
   
     try {
-      const response = await api.post('/login', {
-        email,
-        password,
+      const response = await axios.post('http://localhost:3000/auth/admin-login', {
+        phonenumber: phonenumber,
+        password: password
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
   
-      // Assuming the backend returns a token and a success message
       const { token } = response.data;
-  
-      // Save token and navigate
       localStorage.setItem("adminToken", token);
       navigate("/home");
     } catch (error) {
       if (error.response) {
-        const errorMsg = error.response.data.message || "Login failed";
+        const errorMsg = error.response.data.error || "Login failed";
         setMessage(errorMsg);
-        setEmailError(true);
+        setPhoneError(true);
         setPasswordError(true);
       } else {
         setMessage("Server error. Please try again.");
-        setEmailError(true);
+        setPhoneError(true);
         setPasswordError(true);
       }
     }
   };
+  
   return (
     <div className='body'>
       <div className="wrapper">
         <div className='Logo'>
-          <img src={logo} alt="Logo"/>
+          <img src={logo} alt="Logo" />
           <h1>FixSpot</h1>
-          
-
         </div>
         {action === "check email " ? (
           <div>
@@ -60,15 +60,15 @@ const App = () => {
         ) : (
           <>
             <p className='loginText'>Please enter your administrator login credentials</p>
-            <p className={emailError ? "errormessage" : "correctmessage"}>{message}</p>
+            <p className={phoneError ? "errormessage" : "correctmessage"}>{message}</p>
             <div className="input-box">
               <p>Phone Number</p>
               <input
-                type="phone Number"
-                placeholder="phone number"
-                value={email}
-                onChange={(e) => { setEmail(e.target.value); setEmailError(false); }}
-                className={emailError ? "error-input" : "correct-input"}
+                type="text"
+                placeholder="Phone number"
+                value={phonenumber}
+                onChange={(e) => { setPhoneNumber(e.target.value); setPhoneError(false); }}
+                className={phoneError ? "error-input" : "correct-input"}
               />
             </div>
             <div className="input-box">

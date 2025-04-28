@@ -69,7 +69,6 @@ const Teams = () => {
   const [editMemberDialogOpen, setEditMemberDialogOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
 
-  // Filtered teams
   const filteredTeams = teams.filter(
     (team) =>
       team.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -172,25 +171,24 @@ const Teams = () => {
 
 
       <DataGrid
-        autoHeight
         rows={filteredTeams}
         columns={[
           {
             field: "name",
             headerName: "Name",
-            width: 200,
+            width: 250,
             renderCell: (params) => (
               <Button onClick={() => handleTeamLeaderClick(params.row.groupMembers, params.row.id)}>
                 {params.value}
               </Button>
             ),
           },
-          { field: "phoneNumber", headerName: "Phone Number", width: 200 },
-          { field: "region", headerName: "Region", width: 150 },
+          { field: "phoneNumber", headerName: "Phone Number", width: 250 },
+          { field: "region", headerName: "Region", width: 200 },
           {
             field: "status",
             headerName: "Status",
-            width: 150,
+            width: 200,
             renderCell: (params) => (
               <Chip
                 label={params.value}
