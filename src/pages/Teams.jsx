@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import {
   TextField,
@@ -25,45 +25,113 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const initialTeams = [
-  {
-    id: 1,
-    name: "aaaa aaaa",
-    phoneNumber: "0000000000",
-    status: "Actif",
-    region: "xx",
-    groupMembers: [
-      { id: 1, name: "bbbb bbbb", phoneNumber: "1111111111" },
-      { id: 2, name: "cccc cccc", phoneNumber: "2222222222" },
-    ],
-  },
-  {
-    id: 2,
-    name: "dddd dddd",
-    phoneNumber: "3333333333",
-    status: "Inactif",
-    region: "yy",
-    groupMembers: [{ id: 3, name: "eeee", phoneNumber: "4444444444" }],
-  },
-];
+
+
+
 
 const Teams = () => {
-  const [teams, setTeams] = useState(initialTeams);
+  useEffect(() => {
+    axios.get("http://localhost:3000/admin/team", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+      },
+    })
+      .then(res => {
+        const mapped = res.data.map((t) => ({
+          id: t.id, // Assuming t.id is the DB ID or something unique
+          name: `Team ${t.id}`, // Or however you want to display the name
+          phonenumber: t.phonenumber,
+          region: t.region?.name || "",
+          status: t.isoccupied ? "Actif" : "Inactif",
+          groupMembers: [],
+        }));
+        setTeams(mapped);
+      })
+      .catch(err => {
+        console.error("Error fetching teams", err);
+      });
+  }, []);
+  
+
+
+  const handleAddTeam = async () => {
+    if (!newTeam.phonenumber || !newTeam.password) {
+      alert("Phone number and password are required.");
+      return;
+    }
+  
+    try {
+      // Send only the required fields
+      
+      const response = await axios.post(
+        'http://localhost:3000/admin/team',
+        {
+          phonenumber: newTeam.phonenumber,
+          password: newTeam.password,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+          },
+        }
+      );
+      
+  
+      if (response.status === 200) {
+        toast.success("Équipe ajoutée");  // Make sure you have `toast` imported if you're using it
+  
+        // Re-fetch the updated list of teams
+        const res = await axios.get("http://localhost:3000/admin/team", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+          },
+        });
+  
+        const mapped = res.data.map((t) => ({
+          id: t.id, // Assuming t.id is the DB ID or something unique
+          name: `Team ${t.id}`, // Or however you want to display the name
+          phonenumber: t.phonenumber,
+          region: t.region?.name || "",
+          status: t.isoccupied ? "Actif" : "Inactif",
+          groupMembers: [],
+        }));
+  
+        setTeams(mapped);  
+        setNewTeam({ name: "", phonenumber: "", password: "", region: "", status: "Actif" });
+        setAddDialogOpen(false); 
+      } else {
+        throw new Error(response.data?.error || "Failed to add team.");
+      }
+    } catch (error) {
+      console.error("Add team error:", error.response?.data || error.message);
+      alert(error.response?.data?.error || "Failed to add team.");
+    }
+  };
+  
+  
+  
   const [searchQuery, setSearchQuery] = useState("");
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedTeamId, setSelectedTeamId] = useState(null);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
+  const [teams, setTeams] = useState([]);
   const [newTeam, setNewTeam] = useState({
     name: "",
-    phoneNumber: "",
+    phonenumber: "",
+    password: "",
+    region: "", // optional for UI display
     status: "Actif",
-    region: "",
   });
+  
   const [groupMembersDialogOpen, setGroupMembersDialogOpen] = useState(false);
   const [selectedGroupMembers, setSelectedGroupMembers] = useState([]);
   const [selectedTeamIdForMembers, setSelectedTeamIdForMembers] = useState(null);
-  const [newMember, setNewMember] = useState({ name: "", phoneNumber: "" });
+  const [newMember, setNewMember] = useState({ name: "", phonenumber: "" });
   const [editTeamDialogOpen, setEditTeamDialogOpen] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [editMemberDialogOpen, setEditMemberDialogOpen] = useState(false);
@@ -72,27 +140,37 @@ const Teams = () => {
   const filteredTeams = teams.filter(
     (team) =>
       team.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      team.phoneNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      team.phonenumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
       team.region.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleAddTeam = () => {
-    if (!newTeam.name || !newTeam.phoneNumber || !newTeam.region) return;
-    const newId = teams.length ? teams[teams.length - 1].id + 1 : 1;
-    setTeams([...teams, { id: newId, ...newTeam, groupMembers: [] }]);
-    setNewTeam({ name: "", phoneNumber: "", status: "Actif", region: "" });
-    setAddDialogOpen(false);
-  };
+
 
   const handleDeleteClick = (id) => {
     setSelectedTeamId(id);
     setDeleteDialogOpen(true);
   };
 
-  const handleDeleteConfirm = () => {
-    setTeams(teams.filter((team) => team.id !== selectedTeamId));
-    setDeleteDialogOpen(false);
+  const handleDeleteConfirm = async () => {
+    try {
+      const teamToDelete = teams.find((team) => team.id === selectedTeamId);
+      if (!teamToDelete) return;
+  
+      await axios.delete(`http://localhost:3000/admin/team/${selectedTeamId}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
+      });
+  
+      const updatedTeams = teams.filter((team) => team.id !== selectedTeamId);
+      setTeams(updatedTeams);
+      setDeleteDialogOpen(false);
+      toast.success("Team deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting team:", error.response?.data || error.message);
+      toast.error("Failed to delete team.");
+    }
   };
+  
+  
 
   const handleTeamLeaderClick = (groupMembers, teamId) => {
     setSelectedGroupMembers(groupMembers);
@@ -106,13 +184,13 @@ const Teams = () => {
   };
 
   const handleAddMember = () => {
-    if (!newMember.name || !newMember.phoneNumber) return;
+    if (!newMember.name || !newMember.phonenumber) return;
     const newId = selectedGroupMembers.length
       ? selectedGroupMembers[selectedGroupMembers.length - 1].id + 1
       : 1;
     const updatedMembers = [...selectedGroupMembers, { id: newId, ...newMember }];
     updateGroupMembersInTeam(updatedMembers);
-    setNewMember({ name: "", phoneNumber: "" });
+    setNewMember({ name: "", phonenumber: "" });
   };
 
   const handleDeleteMember = (memberId) => {
@@ -143,6 +221,8 @@ const Teams = () => {
   };
 
   return (
+  <>
+    <ToastContainer />
     <Box sx={{ p: 2 }}>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mb: 2 }}>
   <TextField
@@ -183,7 +263,7 @@ const Teams = () => {
               </Button>
             ),
           },
-          { field: "phoneNumber", headerName: "Phone Number", width: 250 },
+          { field: "phonenumber", headerName: "Phone Number", width: 250 },
           { field: "region", headerName: "Region", width: 200 },
           {
             field: "status",
@@ -238,9 +318,18 @@ const Teams = () => {
           />
           <TextField
             fullWidth
+            label="Password"
+            type="password"
+            value={newTeam.password}
+            onChange={(e) => setNewTeam({ ...newTeam, password: e.target.value })}
+            margin="dense"
+          />
+
+          <TextField
+            fullWidth
             label="Phone Number"
-            value={newTeam.phoneNumber}
-            onChange={(e) => setNewTeam({ ...newTeam, phoneNumber: e.target.value })}
+            value={newTeam.phonenumber}
+            onChange={(e) => setNewTeam({ ...newTeam, phonenumber: e.target.value })}
             margin="dense"
           />
           <TextField
@@ -263,9 +352,13 @@ const Teams = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setAddDialogOpen(false)}>Cancel</Button>
-          <Button onClick={handleAddTeam} variant="contained">
+          <Button
+            onClick={() => handleAddTeam()}  
+            variant="contained"
+          >
             Add
           </Button>
+
         </DialogActions>
       </Dialog>
 
@@ -283,8 +376,8 @@ const Teams = () => {
           <TextField
             fullWidth
             label="Phone Number"
-            value={selectedTeam?.phoneNumber || ""}
-            onChange={(e) => setSelectedTeam({ ...selectedTeam, phoneNumber: e.target.value })}
+            value={selectedTeam?.phonenumber || ""}
+            onChange={(e) => setSelectedTeam({ ...selectedTeam, phonenumber: e.target.value })}
             margin="dense"
           />
           <TextField
@@ -337,8 +430,8 @@ const Teams = () => {
             <TextField
               label="Phone Number"
               fullWidth
-              value={newMember.phoneNumber}
-              onChange={(e) => setNewMember({ ...newMember, phoneNumber: e.target.value })}
+              value={newMember.phonenumber}
+              onChange={(e) => setNewMember({ ...newMember, phonenumber: e.target.value })}
             />
             <Button variant="contained" onClick={handleAddMember}>
               Add Member
@@ -357,7 +450,7 @@ const Teams = () => {
                 {selectedGroupMembers.map((member) => (
                   <TableRow key={member.id}>
                     <TableCell>{member.name}</TableCell>
-                    <TableCell>{member.phoneNumber}</TableCell>
+                    <TableCell>{member.phonenumber}</TableCell>
                     <TableCell>
                       <Button
                         size="small"
@@ -401,8 +494,8 @@ const Teams = () => {
             label="Phone Number"
             fullWidth
             margin="dense"
-            value={selectedMember?.phoneNumber || ""}
-            onChange={(e) => setSelectedMember({ ...selectedMember, phoneNumber: e.target.value })}
+            value={selectedMember?.phonenumber || ""}
+            onChange={(e) => setSelectedMember({ ...selectedMember, phonenumber: e.target.value })}
           />
         </DialogContent>
         <DialogActions>
@@ -429,6 +522,7 @@ const Teams = () => {
         </DialogActions>
       </Dialog>
     </Box>
+    </>  
   );
 };
 

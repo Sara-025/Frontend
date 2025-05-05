@@ -2,7 +2,9 @@
 
 .MainAnnonce {
     display: flex;
-    flex-direction: column;   
+    flex-direction: column;
+      
+  
 }
 .annonce-title {
     display: flex;

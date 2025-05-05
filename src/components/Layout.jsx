@@ -14,6 +14,7 @@ const Layout = ({ children }) => {
           height: "100vh",
           position: "fixed",  
           zIndex: 1100,
+          overscrollBehavior: "contain", 
         }}
       >
         <Sidebar />
@@ -29,6 +30,8 @@ const Layout = ({ children }) => {
           justifyContent:"center",  
           height: "100vh",
           overflow: "hidden",
+          overscrollBehavior: "contain", 
+         
         }}
       >
         {/* Topbar */}
@@ -39,6 +42,7 @@ const Layout = ({ children }) => {
             bgcolor: "#ffffff",
             position: "fixed",
             zIndex: 1000,
+            overscrollBehavior: "contain", 
           }}
         >
           <Topbar  />
@@ -52,7 +56,7 @@ const Layout = ({ children }) => {
             overflowX: "auto",
             width: "calc(99vw - 250px)",
             backgroundColor:"#FAFAFA",
-            
+            overscrollBehavior: "contain", 
           }}
         >
           {children}

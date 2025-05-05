@@ -1,4 +1,8 @@
-/*import "./AnnouncementsStyle.css";
+
+
+
+/* 1-113-156
+import "./AnnouncementsStyle.css";
 import { useState, useEffect } from "react";
 import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import {
@@ -18,9 +22,10 @@ const Announcements = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   const [newContent, setNewContent] = useState("");
-  const [isGlobal, setIsGlobal] = useState(false);
+  const [isGlobalRegion, setIsGlobalRegion] = useState(false);
   const [message, setMessage] = useState("");
 
+  // Fetch announcements when component loads
   useEffect(() => {
     fetchAnnouncements();
   }, []);
@@ -43,11 +48,13 @@ const Announcements = () => {
     setShowDialog(false);
     setNewTitle("");
     setNewContent("");
-    setIsGlobal(false);
+    setIsGlobalRegion(false);
   };
 
   const handleCreateAnnouncement = async () => {
-    if (!newTitle.trim() || !newContent.trim()) {
+    console.log("Trying to create announcement...");
+
+    if (!newTitle || !newContent) {
       alert("Please fill out all fields.");
       return;
     }
@@ -61,8 +68,7 @@ const Announcements = () => {
 
       const response = await axios.post('http://localhost:3000/admin/announcement', {
         title: newTitle,
-        content: newContent,
-        isglobal: isGlobal
+        content: newContent
       }, {
         headers: {
           'Content-Type': 'application/json',
@@ -71,12 +77,13 @@ const Announcements = () => {
       });
 
       setMessage(response.data.message || "Announcement created successfully");
-      await fetchAnnouncements();
-      closeDialog();
+
+      await fetchAnnouncements(); // Refresh list
+      closeDialog(); // Close modal
     } catch (error) {
-      console.error("Create announcement error:", error);
       if (error.response) {
-        setMessage(error.response.data.error || "Failed to create announcement");
+        const errorMsg = error.response.data.error || "Failed to create announcement";
+        setMessage(errorMsg);
       } else {
         setMessage("Server error. Please try again.");
       }
@@ -87,15 +94,15 @@ const Announcements = () => {
     <>
       <div className="MainAnnonce">
         <div>
-          {announcements.map((annonce, index) => (
-            <div className="Annonce-Item" key={index}>
+          {announcements.map((annonce) => (
+            <div className="Annonce-Item" key={annonce.id}>
               <div className="annonce-title">
                 <WaterDropIcon className="icon1" />
                 <h3>{annonce.title}</h3>
               </div>
-              <p><span>Date:</span> {new Date(annonce.createdAt).toLocaleDateString()}</p>
+              <p><span>Date :</span> {new Date(annonce.createdAt).toLocaleDateString()}</p>
               <p>{annonce.content}</p>
-              {annonce.isglobal && (
+              {annonce.isGlobal && (
                 <p style={{ color: "#3737ff" }}>
                   <strong>This announcement is global</strong>
                 </p>
@@ -109,8 +116,8 @@ const Announcements = () => {
         </div>
       </div>
 
-      
-/*      <Dialog open={showDialog} onClose={closeDialog}>
+      {/* Create Announcement Dialog */}
+  /*    <Dialog open={showDialog} onClose={closeDialog}>
         <DialogTitle>Create New Announcement</DialogTitle>
         <DialogContent dividers>
           <TextField
@@ -132,8 +139,8 @@ const Announcements = () => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={isGlobal}
-                onChange={(e) => setIsGlobal(e.target.checked)}
+                checked={isGlobalRegion}
+                onChange={(e) => setIsGlobalRegion(e.target.checked)}
                 color="primary"
               />
             }
@@ -153,7 +160,4 @@ const Announcements = () => {
   );
 };
 
-/*export default Announcements; 
-
-
-/* 1-113-156
+/*export default Announcements;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Reports.css";
 import { useNavigate } from "react-router-dom";
 import image1 from "../assets/1d44e80a5ea075608758d7af813a2d18.jfif";
@@ -21,38 +21,32 @@ import SearchIcon from "@mui/icons-material/Search";
 
 const Reports = () => {
   const navigate = useNavigate();
-  
-  const [users, setUsers] = useState([
-    { id: 1, firstName: "Alexander", lastName: "Foley", phone: "+237 6 99 88 77 66", status: "Validé", location: "3RWJ+X5, Marsa Ben M'Hidi", email: "alexander.foley@mail.com", issueDate: "2022-06-21 14:30:25", image: image1 },
-    { id: 2, firstName: "Alex", lastName: "Poley", phone: "+237 6 99 88 77 66", status: "Actif", location: "HGR2+994, N11, Tipaza" },
-    { id: 3, firstName: "Blexander", lastName: "Foley", phone: "+237 6 99 88 77 66", status: "Inactif" },
-    { id: 4, firstName: "Alexander", lastName: "Foley", phone: "+237 6 99 88 77 66", status: "Validé" },
-  ]);
 
+  const [reports, setReports] = useState([]); 
   const [searchQuery, setSearchQuery] = useState("");
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
 
-  const handleReport = async (user) => {
+
+  const fetchReports = async () => {
     try {
-      const token = localStorage.getItem("adminToken");
-
-      await axios.post('http://localhost:3000/admin', {
-        email: user.email,
-        reportType: "suspend",
-        description: "User reported for suspension."
-      }, {
+      const response = await axios.get("http://localhost:3000/admin/report", {
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+          Authorization: `Bearer ${localStorage.getItem("adminToken")}`, 
+        },
       });
-
-      setSnackbar({ open: true, message: "Report sent successfully!", severity: "success" });
+      setReports(response.data); 
     } catch (error) {
-      console.error(error);
-      setSnackbar({ open: true, message: "Failed to send report.", severity: "error" });
+      setSnackbar({
+        open: true,
+        message: error.response?.data?.error || "Failed to fetch reports",
+        severity: "error",
+      });
     }
   };
+
+  useEffect(() => {
+    fetchReports(); 
+  }, []);
 
   const navigateToSuspend = (user) => {
     navigate(`/Suspend?email=${encodeURIComponent(user.email || "")}&firstName=${encodeURIComponent(user.firstName || "")}&lastName=${encodeURIComponent(user.lastName || "")}&phone=${encodeURIComponent(user.phone || "")}&location=${encodeURIComponent(user.location || "")}&issueDate=${encodeURIComponent(user.issueDate || "")}&image=${encodeURIComponent(user.image || "")}`);
@@ -74,7 +68,7 @@ const Reports = () => {
           sx={{
             width: "930px",
             height: "48px",
-            borderRadius:"30px",
+            borderRadius: "30px",
             "& .MuiOutlinedInput-root": {
               "& fieldset": { borderColor: "#4763E4" },
               "&:hover fieldset": { borderColor: "#4763E4" },
@@ -95,34 +89,25 @@ const Reports = () => {
         <Table>
           <TableHead>
             <TableRow sx={{ backgroundColor: "rgb(255, 255, 255)" }}>
-              <TableCell align="center">First Name</TableCell>
-              <TableCell align="center">Last Name</TableCell>
-              <TableCell align="center">Phone</TableCell>
-              <TableCell align="center">Status</TableCell>
+              <TableCell align="center">Title</TableCell>
+              <TableCell align="center">Created At</TableCell>
+              <TableCell align="center">Team ID</TableCell>
               <TableCell align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {users
-              .filter((user) =>
-                user.firstName.toLowerCase().includes(searchQuery.toLowerCase())
+            {reports
+              .filter((report) =>
+                report.title.toLowerCase().includes(searchQuery.toLowerCase())
               )
-              .map((user) => (
-                <TableRow key={user.id} hover>
-                  <TableCell align="center">{user.firstName}</TableCell>
-                  <TableCell align="center">{user.lastName}</TableCell>
-                  <TableCell align="center">{user.phone}</TableCell>
-                  <TableCell
-                    align="center"
-                    className={
-                      user.status === "Validé" ? "status-valide" : user.status === "Actif" ? "status-actif" : "status-inactif"
-                    }
-                  >
-                    {user.status}
-                  </TableCell>
+              .map((report) => (
+                <TableRow key={report.id} hover>
+                  <TableCell align="center">{report.title}</TableCell>
+                  <TableCell align="center">{new Date(report.createdAt).toLocaleString()}</TableCell>
+                  <TableCell align="center">{report.teamId}</TableCell>
                   <TableCell align="center">
-                    <button className="suspend" onClick={() => navigateToSuspend(user)}>Suspend</button>
-                    <button className="delete" onClick={() => handleReport(user)}>Report</button>
+                    <button className="suspend" onClick={() => navigateToSuspend(report.user)}>Suspend</button>
+                    <button className="delete" onClick={() => navigate(`/report/${report.id}`)}>View Details</button>
                   </TableCell>
                 </TableRow>
               ))}
