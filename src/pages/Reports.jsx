@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Reports.css";
 import { useNavigate } from "react-router-dom";
-import image1 from "../assets/1d44e80a5ea075608758d7af813a2d18.jfif";
+import image2 from "../assets/1d44e80a5ea075608758d7af813a2d18.jfif";
 import axios from "axios";
 import {
   TextField,
@@ -21,6 +21,15 @@ import SearchIcon from "@mui/icons-material/Search";
 
 const Reports = () => {
   const navigate = useNavigate();
+
+  
+  const [users, setUsers] = useState([
+    { id: 1, firstName: "Alexander", lastName: "Foley", phone: "+237 6 99 88 77 66", status: "Validé", location: "3RWJ+X5, Marsa Ben M'Hidi", email: "alexander.foley@mail.com", issueDate: "2022-06-21 14:30:25", lat :35.08071906717006,lng:-2.198613537144971, image: image2  },
+    { id: 2, firstName: "Alex", lastName: "Poley", phone: "+237 6 99 88 77 66", status: "Actif", location: "HGR2+994, N11, Tipaza",lat :36.59786330771613,lng:2.167667479931624 },
+    { id: 3, firstName: "Blexander", lastName: "Foley", phone: "+237 6 99 88 77 66", status: "Inactif" },
+    { id: 4, firstName: "Alexander", lastName: "Foley", phone: "+237 6 99 88 77 66", status: "Validé" },
+  ]);
+
 
   const [reports, setReports] = useState([]); 
   const [searchQuery, setSearchQuery] = useState("");
@@ -49,7 +58,15 @@ const Reports = () => {
   }, []);
 
   const navigateToSuspend = (user) => {
-    navigate(`/Suspend?email=${encodeURIComponent(user.email || "")}&firstName=${encodeURIComponent(user.firstName || "")}&lastName=${encodeURIComponent(user.lastName || "")}&phone=${encodeURIComponent(user.phone || "")}&location=${encodeURIComponent(user.location || "")}&issueDate=${encodeURIComponent(user.issueDate || "")}&image=${encodeURIComponent(user.image || "")}`);
+    navigate(`/Suspend?email=${encodeURIComponent(user.email || "")}
+      &firstName=${encodeURIComponent(user.firstName || "")}
+      &lastName=${encodeURIComponent(user.lastName || "")}
+      &phone=${encodeURIComponent(user.phone || "")}
+      &location=${encodeURIComponent(user.location || "")}
+      &issueDate=${encodeURIComponent(user.issueDate || "")}
+      &image=${encodeURIComponent(user.image || "")}
+      &lat=${encodeURIComponent(user.lat || "")}
+      &lng=${encodeURIComponent(user.lng || "")}`);
   };
 
   const handleCloseSnackbar = () => {

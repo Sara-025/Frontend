@@ -28,13 +28,16 @@ const Suspend = () => {
     location: params.get("location") || "N/A",
     description: "Report details not provided.",
     image: params.get("image") || "N/A",
+    lat :params.get("lat")||"N/A" ,
+    lng : params.get("lng")|| "N/A",
+
   };
 
   const openSetTeam = () => setSetTeamOpen(true);
   const closeSetTeam = () => setSetTeamOpen(false);
 
   const navigateToLocation = () => {
-    navigate(`/Locations?loc=${encodeURIComponent(reportData.location)}`);
+    navigate(`/Locations?loc=${encodeURIComponent(reportData.location)}&lat=${reportData.lat}&lng=${reportData.lng}`);
   };
 
   const navigateToImage = () => {
