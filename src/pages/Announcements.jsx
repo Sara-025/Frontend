@@ -18,7 +18,7 @@ const Announcements = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   const [newContent, setNewContent] = useState("");
-  const [isGlobal, setIsGlobal] = useState(false);
+  const [isglobal, setIsglobal] = useState(false);
   const [message, setMessage] = useState("");
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const Announcements = () => {
     setShowDialog(false);
     setNewTitle("");
     setNewContent("");
-    setIsGlobal(false);
+    setIsglobal(false);
   };
 
   const handleCreateAnnouncement = async () => {
@@ -62,7 +62,7 @@ const Announcements = () => {
       const response = await axios.post('http://localhost:3000/admin/announcement', {
         title: newTitle,
         content: newContent,
-        isglobal: isGlobal
+        isglobal: isglobal
       }, {
         headers: {
           'Content-Type': 'application/json',
@@ -132,8 +132,8 @@ const Announcements = () => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={isGlobal}
-                onChange={(e) => setIsGlobal(e.target.checked)}
+                checked={isglobal}
+                onChange={(e) => setIsglobal(e.target.checked)}
                 color="primary"
               />
             }

@@ -23,7 +23,7 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
+//import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -42,9 +42,10 @@ const Teams = () => {
       },
     })
       .then(res => {
+        console.log("API response:", res.data); 
         const mapped = res.data.map((t) => ({
-          id: t.id, // Assuming t.id is the DB ID or something unique
-          name: `Team ${t.id}`, // Or however you want to display the name
+          id: t.id, 
+          name: `Team ${t.id}`, 
           phonenumber: t.phonenumber,
           region: t.region?.name || "",
           status: t.isoccupied ? "Actif" : "Inactif",
@@ -66,11 +67,12 @@ const Teams = () => {
     }
   
     try {
-      // Send only the required fields
+  
       
       const response = await axios.post(
         'http://localhost:3000/admin/team',
-        {
+        { 
+          
           phonenumber: newTeam.phonenumber,
           password: newTeam.password,
         },
@@ -83,9 +85,7 @@ const Teams = () => {
       
   
       if (response.status === 200) {
-        toast.success("Équipe ajoutée");  // Make sure you have `toast` imported if you're using it
-  
-        // Re-fetch the updated list of teams
+        toast.success("Your team was added successfully"); 
         const res = await axios.get("http://localhost:3000/admin/team", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
@@ -93,8 +93,8 @@ const Teams = () => {
         });
   
         const mapped = res.data.map((t) => ({
-          id: t.id, // Assuming t.id is the DB ID or something unique
-          name: `Team ${t.id}`, // Or however you want to display the name
+          id: t.id, 
+          name: `Team ${t.id}`, 
           phonenumber: t.phonenumber,
           region: t.region?.name || "",
           status: t.isoccupied ? "Actif" : "Inactif",
@@ -105,18 +105,18 @@ const Teams = () => {
         setNewTeam({ name: "", phonenumber: "", password: "", region: "", status: "Actif" });
         setAddDialogOpen(false); 
       } else {
-        throw new Error(response.data?.error || "Failed to add team.");
+        throw new Error(response.data?.error || "Failed to add team");
       }
     } catch (error) {
       console.error("Add team error:", error.response?.data || error.message);
-      alert(error.response?.data?.error || "Failed to add team.");
+      alert(error.response?.data?.error || "Failed to add team");
     }
   };
   
   
   
   const [searchQuery, setSearchQuery] = useState("");
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+//  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedTeamId, setSelectedTeamId] = useState(null);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [teams, setTeams] = useState([]);
@@ -124,7 +124,7 @@ const Teams = () => {
     name: "",
     phonenumber: "",
     password: "",
-    region: "", // optional for UI display
+    region: "", 
     status: "Actif",
   });
   
@@ -139,13 +139,13 @@ const Teams = () => {
 
   const filteredTeams = teams.filter(
     (team) =>
-      team.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (team.name || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
       team.phonenumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
       team.region.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
 
-
+/*  
   const handleDeleteClick = (id) => {
     setSelectedTeamId(id);
     setDeleteDialogOpen(true);
@@ -169,7 +169,7 @@ const Teams = () => {
       toast.error("Failed to delete team.");
     }
   };
-  
+  */
   
 
   const handleTeamLeaderClick = (groupMembers, teamId) => {
@@ -248,27 +248,30 @@ const Teams = () => {
     Add Team
   </Button>
 </Box>
+<Box sx={{flex: 1,p: 2}}>
+<DataGrid
 
-
-      <DataGrid
         rows={filteredTeams}
         columns={[
           {
+            
             field: "name",
             headerName: "Name",
-            width: 250,
+            width: 360,
             renderCell: (params) => (
               <Button onClick={() => handleTeamLeaderClick(params.row.groupMembers, params.row.id)}>
                 {params.value}
               </Button>
             ),
           },
-          { field: "phonenumber", headerName: "Phone Number", width: 250 },
-          { field: "region", headerName: "Region", width: 200 },
+          { field: "phonenumber", headerName: "Phone Number",
+            width: 360,},
+        
           {
+          
             field: "status",
             headerName: "Status",
-            width: 200,
+            width: 360,
             renderCell: (params) => (
               <Chip
                 label={params.value}
@@ -276,7 +279,18 @@ const Teams = () => {
               />
             ),
           },
-          {
+        
+        ]}
+        
+        pageSize={3}
+        rowsPerPageOptions={[3]}
+      />
+</Box>
+
+
+    
+        
+      {/* Add Team Dialog 
             field: "actions",
             headerName: "Actions",
             width: 200,
@@ -299,13 +313,8 @@ const Teams = () => {
                 </Button>
               </>
             ),
-          },
-        ]}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
-      />
+          */}
 
-      {/* Add Team Dialog */}
       <Dialog open={addDialogOpen} onClose={() => setAddDialogOpen(false)}>
         <DialogTitle>Add New Team</DialogTitle>
         <DialogContent>
@@ -363,7 +372,7 @@ const Teams = () => {
       </Dialog>
 
       {/* Edit Team Dialog */}
-      <Dialog open={editTeamDialogOpen} onClose={() => setEditTeamDialogOpen(false)}>
+      {/*<Dialog open={editTeamDialogOpen} onClose={() => setEditTeamDialogOpen(false)}>
         <DialogTitle>Edit Team</DialogTitle>
         <DialogContent>
           <TextField
@@ -415,7 +424,7 @@ const Teams = () => {
           </Button>
         </DialogActions>
       </Dialog>
-
+/*}
       {/* Group Members Dialog */}
       <Dialog open={groupMembersDialogOpen} onClose={() => setGroupMembersDialogOpen(false)} fullWidth maxWidth="md">
         <DialogTitle>Group Members</DialogTitle>
@@ -434,7 +443,7 @@ const Teams = () => {
               onChange={(e) => setNewMember({ ...newMember, phonenumber: e.target.value })}
             />
             <Button variant="contained" onClick={handleAddMember}>
-              Add Member
+              Add 
             </Button>
           </Box>
           <TableContainer component={Paper}>
@@ -443,7 +452,6 @@ const Teams = () => {
                 <TableRow>
                   <TableCell>Name</TableCell>
                   <TableCell>Phone Number</TableCell>
-                  <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -451,7 +459,8 @@ const Teams = () => {
                   <TableRow key={member.id}>
                     <TableCell>{member.name}</TableCell>
                     <TableCell>{member.phonenumber}</TableCell>
-                    <TableCell>
+                  {/*
+                  <TableCell>
                       <Button
                         size="small"
                         startIcon={<EditIcon />}
@@ -468,6 +477,7 @@ const Teams = () => {
                         Delete
                       </Button>
                     </TableCell>
+                  */}  
                   </TableRow>
                 ))}
               </TableBody>
@@ -478,9 +488,9 @@ const Teams = () => {
           <Button onClick={() => setGroupMembersDialogOpen(false)}>Close</Button>
         </DialogActions>
       </Dialog>
-
+  
       {/* Edit Member Dialog */}
-      <Dialog open={editMemberDialogOpen} onClose={() => setEditMemberDialogOpen(false)}>
+    {/*  <Dialog open={editMemberDialogOpen} onClose={() => setEditMemberDialogOpen(false)}>
         <DialogTitle>Edit Member</DialogTitle>
         <DialogContent>
           <TextField
@@ -504,10 +514,10 @@ const Teams = () => {
             Save
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog>*/}
 
       {/* Delete Confirmation Dialog */}
-      <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
+    {/*  <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
         <DialogTitle>Confirm Delete</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -520,7 +530,7 @@ const Teams = () => {
             Delete
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog>*/}
     </Box>
     </>  
   );

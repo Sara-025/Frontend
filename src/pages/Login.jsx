@@ -87,7 +87,7 @@ const App = () => {
                 </>
               )}
             </div>
-            <div className="forgot">
+           <div className="forgot">
               {action !== "Forgot password" && (
                 <p onClick={() => setAction("Forgot password")}>Forgot your password?</p>
               )}

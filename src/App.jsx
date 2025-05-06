@@ -33,7 +33,7 @@ function App() {
                     <Route path="/teams" element={<Teams />} />
                     <Route path="/reports" element={<Reports />} />
                     <Route path="/settings" element={<Settings />} />
-                    <Route path="/suspend" element={<Suspend />} />
+                    <Route path="/Suspend/:reportId" element={<Suspend />} />
                     <Route path="/locations" element={<Location />} />
                     <Route path="/imagePreview" element={<ImagePreview />} />
                   </Routes>

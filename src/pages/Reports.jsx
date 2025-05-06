@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Reports.css";
 import { useNavigate } from "react-router-dom";
-import image2 from "../assets/1d44e80a5ea075608758d7af813a2d18.jfif";
 import axios from "axios";
 import {
   TextField,
@@ -22,19 +21,9 @@ import SearchIcon from "@mui/icons-material/Search";
 const Reports = () => {
   const navigate = useNavigate();
 
-  
-  const [users, setUsers] = useState([
-    { id: 1, firstName: "Alexander", lastName: "Foley", phone: "+237 6 99 88 77 66", status: "Validé", location: "3RWJ+X5, Marsa Ben M'Hidi", email: "alexander.foley@mail.com", issueDate: "2022-06-21 14:30:25", lat :35.08071906717006,lng:-2.198613537144971, image: image2  },
-    { id: 2, firstName: "Alex", lastName: "Poley", phone: "+237 6 99 88 77 66", status: "Actif", location: "HGR2+994, N11, Tipaza",lat :36.59786330771613,lng:2.167667479931624 },
-    { id: 3, firstName: "Blexander", lastName: "Foley", phone: "+237 6 99 88 77 66", status: "Inactif" },
-    { id: 4, firstName: "Alexander", lastName: "Foley", phone: "+237 6 99 88 77 66", status: "Validé" },
-  ]);
-
-
   const [reports, setReports] = useState([]); 
   const [searchQuery, setSearchQuery] = useState("");
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
-
 
   const fetchReports = async () => {
     try {
@@ -43,6 +32,7 @@ const Reports = () => {
           Authorization: `Bearer ${localStorage.getItem("adminToken")}`, 
         },
       });
+      console.log("Fetched Reports:", response.data);
       setReports(response.data); 
     } catch (error) {
       setSnackbar({
@@ -57,16 +47,8 @@ const Reports = () => {
     fetchReports(); 
   }, []);
 
-  const navigateToSuspend = (user) => {
-    navigate(`/Suspend?email=${encodeURIComponent(user.email || "")}
-      &firstName=${encodeURIComponent(user.firstName || "")}
-      &lastName=${encodeURIComponent(user.lastName || "")}
-      &phone=${encodeURIComponent(user.phone || "")}
-      &location=${encodeURIComponent(user.location || "")}
-      &issueDate=${encodeURIComponent(user.issueDate || "")}
-      &image=${encodeURIComponent(user.image || "")}
-      &lat=${encodeURIComponent(user.lat || "")}
-      &lng=${encodeURIComponent(user.lng || "")}`);
+  const navigateToSuspend = (report) => {
+    navigate(`/Suspend/${report.id}`);
   };
 
   const handleCloseSnackbar = () => {
@@ -115,16 +97,17 @@ const Reports = () => {
           <TableBody>
             {reports
               .filter((report) =>
-                report.title.toLowerCase().includes(searchQuery.toLowerCase())
+                (report?.title?.toLowerCase() || "").includes(searchQuery.toLowerCase())
               )
               .map((report) => (
                 <TableRow key={report.id} hover>
-                  <TableCell align="center">{report.title}</TableCell>
-                  <TableCell align="center">{new Date(report.createdAt).toLocaleString()}</TableCell>
-                  <TableCell align="center">{report.teamId}</TableCell>
+                  <TableCell align="center">{report?.title || "No Title"}</TableCell>
                   <TableCell align="center">
-                    <button className="suspend" onClick={() => navigateToSuspend(report.user)}>Suspend</button>
-                    <button className="delete" onClick={() => navigate(`/report/${report.id}`)}>View Details</button>
+                    {new Date(report?.createdAt || "").toLocaleString() || "Invalid Date"}
+                  </TableCell>
+                  <TableCell align="center">{report?.teamId || "N/A"}</TableCell>
+                  <TableCell align="center">
+                    <button className="suspend" onClick={() => navigateToSuspend(report)}>View Details</button>
                   </TableCell>
                 </TableRow>
               ))}

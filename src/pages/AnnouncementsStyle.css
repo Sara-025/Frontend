@@ -59,7 +59,7 @@
 .MainAnnonce span {
     color: rgb(24, 24, 24);
     font-weight: 600;
-    
+    overscroll-Behavior: contain
 }
 .ModalOverlay {
     position: fixed;
