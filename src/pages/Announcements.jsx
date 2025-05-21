@@ -9,7 +9,9 @@ import {
   TextField,
   Button,
   FormControlLabel,
-  Checkbox
+  Checkbox,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import axios from 'axios';
 
@@ -19,7 +21,11 @@ const Announcements = () => {
   const [newTitle, setNewTitle] = useState("");
   const [newContent, setNewContent] = useState("");
   const [isglobal, setIsglobal] = useState(false);
-  const [message, setMessage] = useState("");
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "info", 
+  });
 
   useEffect(() => {
     fetchAnnouncements();
@@ -27,7 +33,7 @@ const Announcements = () => {
 
   const fetchAnnouncements = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/admin/announcement', {
+      const response = await axios.get('http://10.110.15.150:3000/admin/announcement', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
         }
@@ -35,6 +41,11 @@ const Announcements = () => {
       setAnnouncements(response.data || []);
     } catch (error) {
       console.error("Error fetching announcements:", error);
+      setSnackbar({
+        open: true,
+        message: "Failed to fetch announcements.",
+        severity: "error",
+      });
     }
   };
 
@@ -48,18 +59,26 @@ const Announcements = () => {
 
   const handleCreateAnnouncement = async () => {
     if (!newTitle.trim() || !newContent.trim()) {
-      alert("Please fill out all fields.");
+      setSnackbar({
+        open: true,
+        message: "Please fill out all fields.",
+        severity: "warning",
+      });
       return;
     }
 
     try {
       const token = localStorage.getItem("adminToken");
       if (!token) {
-        setMessage("No admin token found. Please login first.");
+        setSnackbar({
+          open: true,
+          message: "No admin token found. Please login first.",
+          severity: "error",
+        });
         return;
       }
 
-      const response = await axios.post('http://localhost:3000/admin/announcement', {
+      const response = await axios.post('http://10.110.15.150:3000/admin/announcement', {
         title: newTitle,
         content: newContent,
         isglobal: isglobal
@@ -70,16 +89,21 @@ const Announcements = () => {
         }
       });
 
-      setMessage(response.data.message || "Announcement created successfully");
+      setSnackbar({
+        open: true,
+        message: response.data.message || "Announcement created successfully",
+        severity: "success",
+      });
+
       await fetchAnnouncements();
       closeDialog();
     } catch (error) {
       console.error("Create announcement error:", error);
-      if (error.response) {
-        setMessage(error.response.data.error || "Failed to create announcement");
-      } else {
-        setMessage("Server error. Please try again.");
-      }
+      setSnackbar({
+        open: true,
+        message: error.response?.data?.error || "Failed to create announcement",
+        severity: "error",
+      });
     }
   };
 
@@ -109,7 +133,6 @@ const Announcements = () => {
         </div>
       </div>
 
-      
       <Dialog open={showDialog} onClose={closeDialog}>
         <DialogTitle>Create New Announcement</DialogTitle>
         <DialogContent dividers>
@@ -149,8 +172,25 @@ const Announcements = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          severity={snackbar.severity}
+          sx={{ width: '100%' }}
+          variant="filled"
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </>
   );
 };
 
-export default Announcements; 
+export default Announcements;

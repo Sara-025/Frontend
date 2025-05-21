@@ -27,7 +27,7 @@ const Reports = () => {
 
   const fetchReports = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/admin/report", {
+      const response = await axios.get("http://10.110.15.150:3000/admin/report", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("adminToken")}`, 
         },

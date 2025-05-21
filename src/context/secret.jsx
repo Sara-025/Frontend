@@ -32,7 +32,7 @@ const Announcements = () => {
 
   const fetchAnnouncements = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/admin/announcement', {
+      const response = await axios.get('http://10.110.15.150:3000/admin/announcement', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
         }
@@ -66,7 +66,7 @@ const Announcements = () => {
         return;
       }
 
-      const response = await axios.post('http://localhost:3000/admin/announcement', {
+      const response = await axios.post('http://10.110.15.150:3000/admin/announcement', {
         title: newTitle,
         content: newContent
       }, {
@@ -116,7 +116,7 @@ const Announcements = () => {
         </div>
       </div>
 
-      {/* Create Announcement Dialog */}
+      {/* Create Announcement Dialog */
   /*    <Dialog open={showDialog} onClose={closeDialog}>
         <DialogTitle>Create New Announcement</DialogTitle>
         <DialogContent dividers>
@@ -160,4 +160,4 @@ const Announcements = () => {
   );
 };
 
-/*export default Announcements;
+/*export default Announcements;*/

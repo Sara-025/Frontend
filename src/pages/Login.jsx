@@ -6,7 +6,7 @@ import axios from 'axios';
 
 const App = () => {
   const [action, setAction] = useState(" ");
-  const [phonenumber, setPhoneNumber] = useState(""); // renamed for clarity
+  const [phonenumber, setPhoneNumber] = useState(""); 
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [phoneError, setPhoneError] = useState(false);
@@ -20,7 +20,7 @@ const App = () => {
     setPasswordError(false);
   
     try {
-      const response = await axios.post('http://localhost:3000/auth/admin-login', {
+      const response = await axios.post('http://10.110.15.150:3000/auth/admin-login', {
         phonenumber: phonenumber,
         password: password
       }, {
@@ -31,6 +31,7 @@ const App = () => {
   
       const { token } = response.data;
       localStorage.setItem("adminToken", token);
+      
       navigate("/home");
     } catch (error) {
       if (error.response) {

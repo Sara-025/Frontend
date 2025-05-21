@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import  { useState } from "react";
+import axios from "axios";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import EditIcon from "@mui/icons-material/Edit";
 import Visibility from "@mui/icons-material/Visibility";
@@ -11,176 +12,180 @@ import {
   DialogActions,
   TextField,
   IconButton,
-  InputAdornment
+  InputAdornment,
+  Snackbar,
+  Alert,
 } from "@mui/material";
-import profil from "../assets/c79a37e13ef14be556b51143bcbb1b01.jpg";
+
 import "./Settings.css";
 
 const Settings = () => {
   const [adminDetail, setAdminDetail] = useState({
-    Name: "Ramesh",
-    PhoneNumber: "0687659944",
-    Email: "remash@gmail.com",
-    Password: "Sn198763",
+    PhoneNumber: "0558743374",
+    Password: "abc", 
   });
 
-  const [originalDetail, setOriginalDetail] = useState(adminDetail);
+  const [originalDetail, setOriginalDetail] = useState({ ...adminDetail });
   const [isEditable, setIsEditable] = useState(false);
   const [isEdited, setIsEdited] = useState(false);
-  const [showPasswordDialog, setShowPasswordDialog] = useState(false);
-  const [confirmCancelOpen, setConfirmCancelOpen] = useState(false);
+  const [passwordDialogOpen, setPasswordDialogOpen] = useState(false);
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+
+  const showSnackbar = (message, severity = "success") => {
+    setSnackbar({ open: true, message, severity });
+  };
+
   const handleInputChange = (e) => {
-    setAdminDetail({ ...adminDetail, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setAdminDetail((prev) => ({ ...prev, [name]: value }));
     setIsEdited(true);
   };
 
   const toggleEdit = () => {
     if (!isEditable) {
-      setOriginalDetail(adminDetail);
+      setOriginalDetail({ ...adminDetail });
       setIsEditable(true);
     } else {
-      setConfirmCancelOpen(true);
+      setCancelDialogOpen(true);
     }
   };
 
   const handleConfirmCancel = () => {
-    setAdminDetail(originalDetail);
+    setAdminDetail({ ...originalDetail });
     setIsEditable(false);
     setIsEdited(false);
-    setConfirmCancelOpen(false);
+    setCancelDialogOpen(false);
   };
 
-  const handleCloseCancelDialog = () => {
-    setConfirmCancelOpen(false);
-  };
+  const handleSaveChanges = async () => {
+    try {
+      const token = localStorage.getItem("adminToken");
+      if (!token) throw new Error("Admin token not found");
 
-  const handleSaveChanges = () => {
-    setIsEditable(false);
-    setIsEdited(false);
-    
-  };
+      await axios.put("http://10.110.15.150:3000/admin/profile", adminDetail, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-  const handleOpenPasswordDialog = () => {
-    setShowPasswordDialog(true);
-  };
-
-  const handleClosePasswordDialog = () => {
-    setShowPasswordDialog(false);
-    setCurrentPassword(""); 
-    setNewPassword(""); 
-  };
-
-  const handleSaveNewPassword = () => {
-    if (currentPassword === adminDetail.Password) {
-      setAdminDetail({ ...adminDetail, Password: newPassword });
-      handleClosePasswordDialog();
-    } else {
-      alert("Current password is incorrect!");
+      setIsEditable(false);
+      setIsEdited(false);
+      showSnackbar("Changes saved successfully.", "success");
+    } catch (err) {
+      showSnackbar("Failed to save changes.", "error");
     }
   };
 
+  const handleSaveNewPassword = async () => {
+    try {
+      const token = localStorage.getItem("adminToken");
+
+      const response = await axios.put(
+        "http://10.110.15.150:3000/admin/change-password",
+        { currentPassword, newPassword },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      showSnackbar(response.data.message || "Password changed successfully.", "success");
+      setAdminDetail((prev) => ({ ...prev, Password: newPassword }));
+      closePasswordDialog();
+    } catch (err) {
+      const errMsg = err.response?.data?.error || "Failed to change password.";
+      showSnackbar(errMsg, "error");
+    }
+  };
+
+  const openPasswordDialog = () => {
+    setPasswordDialogOpen(true);
+  };
+
+  const closePasswordDialog = () => {
+    setPasswordDialogOpen(false);
+    setCurrentPassword("");
+    setNewPassword("");
+  };
+
   return (
-    <div className='SettingsMain'>
+    <div className="SettingsMain">
       <div className="TopItem">
-        <PermIdentityIcon className='ProfileIcon' />
+        <PermIdentityIcon className="ProfileIcon" />
         <p>My Profile</p>
       </div>
 
-      <div className='ProfileMain'>
-        <div className='Profile'>
-          <div className='ProfilePhoto' style={{ display: 'flex', alignItems: 'center' }}>
-            <img
-              src={profil}
-              alt="profil"
-              style={{ width: "100px", marginLeft: "10px", marginRight: "20px", cursor: "pointer" ,borderRadius:"50px", border:"2px solid rgb(4, 113, 209) "}}
-            />
-            <div>
-              <h4>{adminDetail.Name}</h4>
-              <p>{adminDetail.PhoneNumber}</p>
-            </div>
+      <div className="ProfileMain">
+        <div className="Profile">
+          <div className="ProfilePhoto">
+            <p>{adminDetail.PhoneNumber}</p>
           </div>
 
-          <div style={{ display: 'flex', gap: '10px', marginTop: "70px" }}>
-            
+          <div className="ProfileActions">
             <Button
-              
               startIcon={<EditIcon />}
-              color= "primary"
               variant="outlined"
-              size="small"
+              color="primary"
               onClick={toggleEdit}
             >
               {isEditable ? "Cancel" : "Edit"}
             </Button>
-            {isEdited && isEditable && (
-              <Button
-                
-                color="primary"
-                variant="outlined"
-                onClick={handleSaveChanges}
-                
-              >
+            {isEditable && isEdited && (
+              <Button variant="outlined" color="primary" onClick={handleSaveChanges}>
                 Save
               </Button>
             )}
           </div>
         </div>
 
-        <div className='ProfileDetials'>
-          <div className='ProfileP'>
-            <p>Name</p>
+        <div className="ProfileDetials">
+          <div className="ProfileP">
             <p>Phone Number</p>
-            <p>Email</p>
             <p>Password</p>
           </div>
 
-          <div className='ProfileItem'>
-            <input
-              name="Name"
-              value={adminDetail.Name}
-              onChange={handleInputChange}
-              readOnly={!isEditable}
-            />
-            <input
+          <div className="ProfileItem">
+            <TextField
               name="PhoneNumber"
               value={adminDetail.PhoneNumber}
               onChange={handleInputChange}
-              readOnly={!isEditable}
+              InputProps={{ readOnly: !isEditable }}
+              fullWidth
+              margin="dense"
             />
-            <input
-              name="Email"
-              value={adminDetail.Email}
-              onChange={handleInputChange}
-              readOnly={!isEditable}
-            />
-            <input
+
+            <TextField
               value={adminDetail.Password}
-              readOnly
+              type="password"
+              fullWidth
+              margin="dense"
+              InputProps={{ readOnly: true }}
             />
 
             {isEditable && (
-                <div style={{ marginTop: "20px", textAlign: "right" }}>
-              <Button
-                variant="outlined"
-                color="primary"
-                
-                onClick={handleOpenPasswordDialog}
-              >
-                Change Password
-              </Button>
+              <div className="ChangePassBtn">
+                <Button variant="outlined" onClick={openPasswordDialog}>
+                  Change Password
+                </Button>
               </div>
             )}
           </div>
         </div>
       </div>
 
-      {/* Password Dialog */}
-      <Dialog open={showPasswordDialog} onClose={handleClosePasswordDialog}>
+
+      <Dialog open={passwordDialogOpen} onClose={closePasswordDialog}>
         <DialogTitle>Change Password</DialogTitle>
         <DialogContent>
           <TextField
@@ -193,11 +198,11 @@ const Settings = () => {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton onClick={() => setShowCurrentPassword(!showCurrentPassword)}>
+                  <IconButton onClick={() => setShowCurrentPassword((v) => !v)}>
                     {showCurrentPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
-              )
+              ),
             }}
           />
           <TextField
@@ -210,30 +215,30 @@ const Settings = () => {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton onClick={() => setShowNewPassword(!showNewPassword)}>
+                  <IconButton onClick={() => setShowNewPassword((v) => !v)}>
                     {showNewPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
-              )
+              ),
             }}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClosePasswordDialog}>Cancel</Button>
+          <Button onClick={closePasswordDialog}>Cancel</Button>
           <Button color="primary" variant="contained" onClick={handleSaveNewPassword}>
             Save
           </Button>
         </DialogActions>
       </Dialog>
 
-      {/* Confirm Cancel Dialog */}
-      <Dialog open={confirmCancelOpen} onClose={handleCloseCancelDialog}>
+      
+      <Dialog open={cancelDialogOpen} onClose={() => setCancelDialogOpen(false)}>
         <DialogTitle>Cancel Changes?</DialogTitle>
         <DialogContent>
-          <p>Are you sure you want to cancel the changes? Any unsaved data will be lost.</p>
+          Are you sure you want to cancel your changes? Unsaved data will be lost.
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseCancelDialog} color="primary">
+          <Button onClick={() => setCancelDialogOpen(false)} color="primary">
             No
           </Button>
           <Button onClick={handleConfirmCancel} color="error" variant="contained">
@@ -241,6 +246,23 @@ const Settings = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+    
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+          variant="filled"
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

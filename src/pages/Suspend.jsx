@@ -24,7 +24,7 @@ const Suspend = () => {
   useEffect(() => {
     const fetchReport = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/admin/report/${reportId}`, {
+        const res = await axios.get(`http://10.110.15.150:3000/admin/report/${reportId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("adminToken")}`
           }
@@ -67,7 +67,7 @@ const Suspend = () => {
   const handleAssignTeam = async () => {
     try {
       const token = localStorage.getItem("adminToken");
-      const res = await axios.post("http://localhost:3000/admin/assign-report", {
+      const res = await axios.post("http://10.110.15.150:3000/admin/assign-report", {
         reportid: reportId,
         teamid: teamId
       }, {

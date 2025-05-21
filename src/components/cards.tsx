@@ -1,5 +1,4 @@
-import { TrendingDownIcon, TrendingUpIcon } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+
 import {
   Card,
   CardDescription,
@@ -8,173 +7,106 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-interface RevenueCardProps {
-  amount: string;
-  percentage: string;
-  isUp: boolean;
-  trendLabel: string;
+interface totalreport {
+  total: string;
+
 }
 
-export const RevenueCard: React.FC<RevenueCardProps> = ({ amount, percentage, isUp, trendLabel }) => {
+export const TotalReport: React.FC<totalreport> = ({ total }) => {
   return (
     <Card className="@container/card bg-blue-200  cursor-pointer">
       <CardHeader className="flex items-center justify-start space-x-4 relative left-4 top-2">
-        <CardDescription>Total Revenue</CardDescription>
+        <CardDescription>Total reports</CardDescription>
         <CardTitle className="text-2xl font-semibold tabular-nums text-center">
-          {amount}
+          {total}
         </CardTitle>
-        <div className="absolute right-4 top-4 z-10">
-          <Badge variant="outline" className="flex gap-1 rounded-lg text-xs">
-            {isUp ? (
-              <TrendingUpIcon className="size-3" />
-            ) : (
-              <TrendingDownIcon className="size-3" />
-            )}
-            {percentage}
-          </Badge>
-        </div>
+        
       </CardHeader>
+      
       <CardFooter className="flex flex-col items-center gap-1 text-sm">
-        <div className="line-clamp-1 flex gap-2 font-medium">
-          {trendLabel}{" "}
-          {isUp ? (
-            <TrendingUpIcon className="size-4" />
-          ) : (
-            <TrendingDownIcon className="size-4" />
-          )}
-        </div>
+             <div className="line-clamp-1 flex gap-2 font-medium"> Collected report statistics</div>
+       
+        
         <div className="text-muted-foreground">
-          Visitors for the last 6 months {/* Static subtitle */}
+          <a href="#overview" className="cursor-pointer ">Report activity overview</a>
         </div>
       </CardFooter>
     </Card>
   );
 };
-interface NewUsersCardProps {
-    amount: string;
-    percentage: string;
-    isUp: boolean;
-    trendLabel: string;
-    subtitle: string;
+interface PendingReports {
+    number: string;
   }
   
-  export const NewUsersCard: React.FC<NewUsersCardProps> = ({ amount, percentage, isUp, trendLabel, subtitle }) => {
+  export const PendingReports: React.FC<PendingReports> = ({ number }) => {
     return (
       <Card className="@container/card bg-blue-200  cursor-pointer">
         <CardHeader className="flex items-center justify-start space-x-4 relative left-4 top-2">
-          <CardDescription>New Users</CardDescription> 
+          <CardDescription>Pending Reports</CardDescription> 
           <CardTitle className="text-2xl font-semibold tabular-nums">
-            {amount}
+            {number}
           </CardTitle>
           <div className="absolute right-4 top-4 z-10">
-            <Badge variant="outline" className="flex gap-1 rounded-lg text-xs">
-              {isUp ? (
-                <TrendingUpIcon className="size-3" />
-              ) : (
-                <TrendingDownIcon className="size-3" />
-              )}
-              {percentage}
-            </Badge>
+            
           </div>
         </CardHeader>
+        
         <CardFooter className="flex flex-col items-center gap-1 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            {trendLabel}{" "}
-            {isUp ? (
-              <TrendingUpIcon className="size-4" />
-            ) : (
-              <TrendingDownIcon className="size-4" />
-            )}
-          </div>
+          <div className="line-clamp-1 flex gap-2 font-medium">Reports currently awaiting review </div>
+          
           <div className="text-muted-foreground">
-            {subtitle} 
+            Pending reports status 
           </div>
         </CardFooter>
+        
       </Card>
     );
   };
  
-interface ActiveUsersCardProps {
-  amount: string;
-  percentage: string;
-  isUp: boolean;
-  trendLabel: string;
-  subtitle: string;
+interface ResolvedReports {
+  number: string;
 }
 
-export const ActiveUsersCard: React.FC<ActiveUsersCardProps> = ({ amount, percentage, isUp, trendLabel, subtitle }) => {
+export const ResolvedReports: React.FC<ResolvedReports> = ({ number }) => {
   return (
     <Card className="@container/card bg-blue-200  cursor-pointer">
       <CardHeader className="flex items-center justify-start space-x-4 relative left-4 top-2">
-        <CardDescription>Active Users</CardDescription> 
+        <CardDescription>Resolved Reports</CardDescription> 
         <CardTitle className="text-2xl font-semibold tabular-nums text-center">
-          {amount}
+          {number}
         </CardTitle>
-        <div className="absolute right-4 top-4 z-10">
-          <Badge variant="outline" className="flex gap-1 rounded-lg text-xs">
-            {isUp ? (
-              <TrendingUpIcon className="size-3" />
-            ) : (
-              <TrendingDownIcon className="size-3" />
-            )}
-            {percentage}
-          </Badge>
-        </div>
+     
       </CardHeader>
       <CardFooter className="flex flex-col items-center gap-1 text-sm">
-        <div className="line-clamp-1 flex gap-2 font-medium">
-          {trendLabel}{" "}
-          {isUp ? (
-            <TrendingUpIcon className="size-4" />
-          ) : (
-            <TrendingDownIcon className="size-4" />
-          )}
-        </div>
+         <div className="line-clamp-1 flex gap-2 font-medium">Reports resolved in the recent period</div>
+        
         <div className="text-muted-foreground">
-          {subtitle}
+          <a href="#resolved" className="cursor-pointer ">Resolution overview</a>
         </div>
       </CardFooter>
     </Card>
   );
 };
 
-interface ActiveTeamsCardProps {
-  percentage: string;
-  trendLabel: string;
-  subtitle: string;
-  isUp: boolean;
+interface NumberOfTeams {
+  number: string;
 }
 
-export const ActiveTeamsCard: React.FC<ActiveTeamsCardProps> = ({ percentage, trendLabel, subtitle, isUp }) => {
+export const NumberOfTeams: React.FC<NumberOfTeams> = ({ number}) => {
   return (
     <Card className="@container/card bg-blue-200  cursor-pointer">
       <CardHeader className="flex items-center justify-start space-x-4 relative left-4 top-2">
-        <CardDescription>Active Teams</CardDescription> {/* Static title */}
+        <CardDescription>Number Of Teams</CardDescription> 
         <CardTitle className="text-2xl font-semibold tabular-nums text-center">
-          {percentage}
+          {number}
         </CardTitle>
-        <div className="absolute right-4 top-4 z-10">
-          <Badge variant="outline" className="flex gap-1 rounded-lg text-xs">
-            {isUp ? (
-              <TrendingUpIcon className="size-3" />
-            ) : (
-              <TrendingDownIcon className="size-3" />
-            )}
-            {percentage}
-          </Badge>
-        </div>
+       
       </CardHeader>
       <CardFooter className="flex flex-col items-center gap-1 text-sm">
-        <div className="line-clamp-1 flex gap-2 font-medium">
-          {trendLabel}{" "}
-          {isUp ? (
-            <TrendingUpIcon className="size-4" />
-          ) : (
-            <TrendingDownIcon className="size-4" />
-          )}
-        </div>
+         <div className="line-clamp-1 flex gap-2 font-medium">All registered teams</div>
+      
         <div className="text-muted-foreground">
-          {subtitle}
+          <a href="#teams" className="cursor-pointer ">teams status overview</a>
         </div>
       </CardFooter>
     </Card>
