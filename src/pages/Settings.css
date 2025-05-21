@@ -43,13 +43,14 @@
 }
 
 .ProfileDetials{
-    padding: 20px;
+    padding: 30px;
     border: 1.5px solid white;
     background-color: white;
     box-shadow: 0px 1px 4px rgba(0,0,0,0.2) ;
     display: flex;
     flex-direction:row;
     border-radius: 10px;
+    
     
 
 }
@@ -59,25 +60,14 @@
     width: 100%;
     
 }
-.ProfileItem input {
-    width:99%;
-    padding:10px 0px 10px 20px  ;
-    border: 1.5px solid rgb(249, 248, 248);
-    margin-bottom: 20px;
-    color: rgb(85, 82, 82);
-    background-color: #f9f8f8;
-    border-radius: 15px;
-    outline: none;
-    
 
-}
 .ProfileP{ 
     width: 30%;
 }
 
 .ProfileP p {
     color: rgb(97, 96, 96);
-    padding: 12px 0px 30px 0 ;
+    padding: 15px 0px 40px 5px ;
     
 
 }

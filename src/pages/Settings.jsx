@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import EditIcon from "@mui/icons-material/Edit";
@@ -16,13 +16,13 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-
 import "./Settings.css";
+import profil from "../assets/istockphoto-1300845620-612x612-removebg-preview.png";
 
 const Settings = () => {
   const [adminDetail, setAdminDetail] = useState({
     PhoneNumber: "0558743374",
-    Password: "abc", 
+    Password: "abc",
   });
 
   const [originalDetail, setOriginalDetail] = useState({ ...adminDetail });
@@ -30,8 +30,11 @@ const Settings = () => {
   const [isEdited, setIsEdited] = useState(false);
   const [passwordDialogOpen, setPasswordDialogOpen] = useState(false);
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+
+  const [showProfilePassword, setShowProfilePassword] = useState(false);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
+
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
@@ -128,8 +131,15 @@ const Settings = () => {
 
       <div className="ProfileMain">
         <div className="Profile">
-          <div className="ProfilePhoto">
-            <p>{adminDetail.PhoneNumber}</p>
+          <div className="ProfilePhoto" style={{ display: "flex", alignItems: "center" }}>
+            <img
+              src={profil}
+              alt="profil"
+              style={{ width: "150px", marginLeft: "0px", marginRight: "5px", cursor: "pointer" }}
+            />
+            <div>
+              <p>{adminDetail.PhoneNumber}</p>
+            </div>
           </div>
 
           <div className="ProfileActions">
@@ -167,14 +177,23 @@ const Settings = () => {
 
             <TextField
               value={adminDetail.Password}
-              type="password"
+              type={showProfilePassword ? "text" : "password"}
               fullWidth
               margin="dense"
-              InputProps={{ readOnly: true }}
+              InputProps={{
+                readOnly: true,
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => setShowProfilePassword((prev) => !prev)}>
+                      {showProfilePassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
 
             {isEditable && (
-              <div className="ChangePassBtn">
+              <div style={{ marginTop: "20px", textAlign: "right" }}>
                 <Button variant="outlined" onClick={openPasswordDialog}>
                   Change Password
                 </Button>
@@ -184,7 +203,7 @@ const Settings = () => {
         </div>
       </div>
 
-
+      {/* Password Dialog */}
       <Dialog open={passwordDialogOpen} onClose={closePasswordDialog}>
         <DialogTitle>Change Password</DialogTitle>
         <DialogContent>
@@ -231,7 +250,7 @@ const Settings = () => {
         </DialogActions>
       </Dialog>
 
-      
+      {/* Cancel Edit Dialog */}
       <Dialog open={cancelDialogOpen} onClose={() => setCancelDialogOpen(false)}>
         <DialogTitle>Cancel Changes?</DialogTitle>
         <DialogContent>
@@ -247,7 +266,7 @@ const Settings = () => {
         </DialogActions>
       </Dialog>
 
-    
+      {/* Snackbar */}
       <Snackbar
         open={snackbar.open}
         autoHideDuration={4000}
