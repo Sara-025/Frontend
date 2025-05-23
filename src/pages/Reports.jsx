@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
+import axios from "axios";
 import "./Reports.css";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import {
   TextField,
   Box,
@@ -21,34 +21,66 @@ import SearchIcon from "@mui/icons-material/Search";
 const Reports = () => {
   const navigate = useNavigate();
 
-  const [reports, setReports] = useState([]); 
+  const [reports, setReports] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
 
-  // Fetch all reports in admin's region
-  const fetchReports = async () => {
-    try {
-      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/report`, {
+  
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_API_BASE_URL}/admin/report`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("adminToken")}`, 
         },
+      })
+      .then((res) => {
+        setReports(res.data);
+        console.log(res.data);
+        
+      })
+      .catch((err) => {
+        setSnackbar({
+          open: true,
+          message: "Failed to load reports",
+          severity: "error",
+        });
       });
-      setReports(response.data); 
-    } catch (error) {
-      setSnackbar({
-        open: true,
-        message: error.response?.data?.error || "Failed to fetch reports",
-        severity: "error",
-      });
-    }
-  };
-
-  useEffect(() => {
-    fetchReports(); 
   }, []);
 
-  const navigateToSuspend = (report) => {
-    navigate(`/Suspend/${report.id}`, { state: { report } });
+  const navigateToviewDetails = (report) => {
+    navigate(`/reports/${report.id}`, { state: { report } });
+  };
+
+  const handleMarkAsDuplicate = (reportId) => {
+    axios
+      .post(
+        `${import.meta.env.VITE_API_BASE_URL}/admin/duplicate`,
+        { reportid: reportId },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+          },
+        }
+      )
+      .then(() => {
+        setReports((prevReports) =>
+          prevReports.map((r) =>
+            r.id === reportId ? { ...r, status: "DUPLICATE" } : r
+          )
+        );
+        setSnackbar({
+          open: true,
+          message: "Report marked as duplicate",
+          severity: "success",
+        });
+      })
+      .catch(() => {
+        setSnackbar({
+          open: true,
+          message: "Failed to mark report as duplicate",
+          severity: "error",
+        });
+      });
   };
 
   const handleCloseSnackbar = () => {
@@ -57,7 +89,17 @@ const Reports = () => {
 
   return (
     <div className="Reports-Main">
-      <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2, paddingLeft: "30px", paddingBottom: "10px", borderRadius: "30px" }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 2,
+          mb: 2,
+          paddingLeft: "30px",
+          paddingBottom: "10px",
+          borderRadius: "30px",
+        }}
+      >
         <TextField
           label="Search"
           variant="outlined"
@@ -90,7 +132,7 @@ const Reports = () => {
             <TableRow sx={{ backgroundColor: "rgb(255, 255, 255)" }}>
               <TableCell align="center">Title</TableCell>
               <TableCell align="center">Created At</TableCell>
-              <TableCell align="center">Team ID</TableCell>
+              <TableCell align="center"> ID</TableCell>
               <TableCell align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -100,14 +142,24 @@ const Reports = () => {
                 (report?.title?.toLowerCase() || "").includes(searchQuery.toLowerCase())
               )
               .map((report) => (
-                <TableRow key={report.id} hover>
-                  <TableCell align="center">{report?.title || "No Title"}</TableCell>
+                <TableRow
+                  key={report.id}
+                  hover
+                  style={{
+                    backgroundColor: report.status === "MAYBEDUPLICATE" ? "#ffe7e1" : "inherit",
+                  }}
+                >
+                  <TableCell align="center">{report.title}</TableCell>
+                  <TableCell align="center">{new Date(report.createdAt).toLocaleString()}</TableCell>
+                  <TableCell align="center">{report.teamId ?? "N/A"}</TableCell>
                   <TableCell align="center">
-                    {new Date(report?.createdAt || "").toLocaleString() || "Invalid Date"}
-                  </TableCell>
-                  <TableCell align="center">{report?.teamId ?? "N/A"}</TableCell>
-                  <TableCell align="center">
-                    <button className="suspend" onClick={() => navigateToSuspend(report)}>View Details</button>
+                    <button
+                      className="viewDetails"
+                      onClick={() => navigateToviewDetails(report)}
+                    >
+                      View Details
+                    </button>
+                  
                   </TableCell>
                 </TableRow>
               ))}
@@ -116,7 +168,7 @@ const Reports = () => {
       </TableContainer>
 
       <Snackbar open={snackbar.open} autoHideDuration={4000} onClose={handleCloseSnackbar}>
-        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: "100%" }}>
           {snackbar.message}
         </Alert>
       </Snackbar>

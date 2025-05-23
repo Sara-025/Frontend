@@ -75,11 +75,11 @@ const Sidebar = () => {
   onClose={handleLogoutCancel}
   PaperProps={{
     sx: {
-      borderRadius: 4,         // rounded corners
-      p: 2,                    // padding
+      borderRadius: 4,         
+      p: 2,                   
       width: '100%',
-      maxWidth: 400,           // custom width
-      textAlign: 'center',     // center content
+      maxWidth: 400,
+      textAlign: 'center',    
     }
   }}
 >

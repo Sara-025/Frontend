@@ -5,7 +5,7 @@ import Teams from "./pages/Teams";
 import Reports from "./pages/Reports";
 import { SelectedItemProvider } from "./context/SelectedItemContext";
 import Login from "./pages/Login";
-import Suspend from "./pages/Suspend";
+import ViewDetails from "./pages/viewDetails";
 import Location from "./pages/Locations";
 import ImagePreview from "./pages/imagePreview";
 import Announcements from "./pages/Announcements";
@@ -33,7 +33,7 @@ function App() {
                     <Route path="/teams" element={<Teams />} />
                     <Route path="/reports" element={<Reports />} />
                     <Route path="/settings" element={<Settings />} />
-                    <Route path="/Suspend/:reportId" element={<Suspend />} />
+                    <Route path="/reports/:id" element={<ViewDetails />} />
                     <Route path="/locations" element={<Location />} />
                     <Route path="/imagePreview" element={<ImagePreview />} />
                   </Routes>

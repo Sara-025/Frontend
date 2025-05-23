@@ -16,7 +16,7 @@
     color: #e3a5a5 !important;
     font-weight: 600 !important;
   } 
-  .suspend {
+  .viewDetails {
     background-color: #ffffff;
     border: 1.2px solid #5C73DB !important;
     color: #5C73DB;
@@ -29,7 +29,7 @@
     margin-right: 12px;
   }
   
-  .suspend:hover{
+  .viewDetails:hover{
     color: #fff;
     background-color: #5C73DB;
   }
