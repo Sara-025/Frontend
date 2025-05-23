@@ -25,14 +25,14 @@ const Reports = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
 
+  // Fetch all reports in admin's region
   const fetchReports = async () => {
     try {
-      const response = await axios.get("http://10.110.15.150:3000/admin/report", {
+      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/report`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("adminToken")}`, 
         },
       });
-      console.log("Fetched Reports:", response.data);
       setReports(response.data); 
     } catch (error) {
       setSnackbar({
@@ -48,7 +48,7 @@ const Reports = () => {
   }, []);
 
   const navigateToSuspend = (report) => {
-    navigate(`/Suspend/${report.id}`);
+    navigate(`/Suspend/${report.id}`, { state: { report } });
   };
 
   const handleCloseSnackbar = () => {
@@ -105,7 +105,7 @@ const Reports = () => {
                   <TableCell align="center">
                     {new Date(report?.createdAt || "").toLocaleString() || "Invalid Date"}
                   </TableCell>
-                  <TableCell align="center">{report?.teamId || "N/A"}</TableCell>
+                  <TableCell align="center">{report?.teamId ?? "N/A"}</TableCell>
                   <TableCell align="center">
                     <button className="suspend" onClick={() => navigateToSuspend(report)}>View Details</button>
                   </TableCell>

@@ -1,7 +1,6 @@
 import './SuspendStyle.css';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import ImageIcon from '@mui/icons-material/Image';
 import {
   Dialog,
@@ -15,49 +14,60 @@ import {
 const Suspend = () => {
   const { reportId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const [reportData, setReportData] = useState(null);
+  const reportData = location.state?.report;
+  const [detailedReport, setDetailedReport] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [setTeamOpen, setSetTeamOpen] = useState(false);
   const [teamId, setTeamId] = useState('');
   const [assignMsg, setAssignMsg] = useState('');
+  const [imageDialogOpen, setImageDialogOpen] = useState(false);
 
   useEffect(() => {
-    const fetchReport = async () => {
-      try {
-        const res = await axios.get(`http://10.110.15.150:3000/admin/report/${reportId}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("adminToken")}`
-          }
-        });
-        console.log("Fetched Report:", res.data);
-        setReportData(res.data);
-      } catch (err) {
-        console.error("Error fetching report:", err);
-        setReportData({});
+    const fetchDetailedReport = async () => {
+      if (reportData) {
+        try {
+          const token = localStorage.getItem("adminToken");
+          const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/admin/report/${reportId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          if (!res.ok) throw new Error("Failed to fetch detailed report");
+          const data = await res.json();
+          setDetailedReport(data);
+        } catch (err) {
+          setDetailedReport(null);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setLoading(false);
       }
     };
 
-    fetchReport();
-  }, [reportId]);
+    fetchDetailedReport();
+  }, [reportData, reportId]);
 
-  if (!reportData) return <div>Loading...</div>;
+  if (loading) return <div>Loading report data...</div>;
 
-  const user = reportData.user || {};
+  const report = detailedReport || reportData;
+  if (!report) return <div>Missing report data. Please go back and try again.</div>;
+
+  const user = report.user || {};
   const fullName = user.fullname || "";
   const [firstName = "", lastName = ""] = fullName.split(" ");
 
   const handleLocationClick = () => {
-    navigate(`/Locations?loc=${encodeURIComponent(reportData.location || "N/A")}&lat=${reportData.lat || "N/A"}&lng=${reportData.lon || "N/A"}`);
-  };
-
-  const handleImageClick = () => {
-    navigate(`/imagePreview?img=${encodeURIComponent((reportData.images?.user?.[0]) || "N/A")}`);
+    navigate(`/Locations?loc=${encodeURIComponent(report.location || "N/A")}&lat=${report.lat || "N/A"}&lng=${report.lon || "N/A"}`);
   };
 
   const openSetTeam = () => {
     setAssignMsg('');
     setSetTeamOpen(true);
   };
+
   const closeSetTeam = () => {
     setSetTeamOpen(false);
     setTeamId('');
@@ -67,19 +77,23 @@ const Suspend = () => {
   const handleAssignTeam = async () => {
     try {
       const token = localStorage.getItem("adminToken");
-      const res = await axios.post("http://10.110.15.150:3000/admin/assign-report", {
-        reportid: reportId,
-        teamid: teamId
-      }, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/admin/assign-report`, {
+        method: "POST",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`
-        }
+        },
+        body: JSON.stringify({
+          reportid: reportId,
+          teamid: teamId
+        })
       });
-      console.log('Assigned Team Response:', res.data);
-      setAssignMsg(res.data.message);
-      setTimeout(closeSetTeam, 1000); // close after success
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setAssignMsg(data.message);
+      setTimeout(closeSetTeam, 1000);
     } catch (err) {
-      setAssignMsg(err.response?.data?.error || "Error assigning team");
+      setAssignMsg(err.message || "Error assigning team");
     }
   };
 
@@ -87,19 +101,10 @@ const Suspend = () => {
     <div className="report-container">
       <h3>View Account</h3>
       <div className="Main">
-        <div className="report-field">
-          <p>Adresse e-mail:</p>
-          <input type="email" value={user.email || "N/A"} readOnly />
-        </div>
 
         <div className="report-field">
-          <p>Nom:</p>
-          <input type="text" value={firstName || "N/A"} readOnly />
-        </div>
-
-        <div className="report-field">
-          <p>Prénom:</p>
-          <input type="text" value={lastName || "N/A"} readOnly />
+          <p>Full name :</p>
+          <input type="text" value={user.fullname || "N/A"} readOnly />
         </div>
 
         <div className="report-field">
@@ -109,14 +114,14 @@ const Suspend = () => {
 
         <div className="report-field">
           <p>Report Date:</p>
-          <input type="text" value={new Date(reportData.createdAt).toLocaleString() || "N/A"} readOnly />
+          <input type="text" value={new Date(report.createdAt).toLocaleString() || "N/A"} readOnly />
         </div>
 
         <div className="report-field">
           <p>Location:</p>
           <input
             type="text"
-            value={reportData.location || "N/A"}
+            value={report.location || "N/A"}
             onClick={handleLocationClick}
             readOnly
             style={{ cursor: "pointer" }}
@@ -125,13 +130,13 @@ const Suspend = () => {
 
         <div className="report-field">
           <p>Description:</p>
-          <input type="text" value={"Report details not provided."} readOnly />
+          <input type="text" value={report.description || "Report details not provided."} readOnly />
         </div>
 
         <div className="report-field">
           <p>Image Preview:</p>
           <button
-            onClick={handleImageClick}
+            onClick={() => setImageDialogOpen(true)}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -166,7 +171,7 @@ const Suspend = () => {
             onChange={(e) => setTeamId(e.target.value)}
           />
           {assignMsg && (
-            <p style={{ color: assignMsg.includes("success") ? "green" : "red", marginTop: 10 }}>
+            <p style={{ color: assignMsg.includes("successfully") ? "green" : "red", marginTop: 10 }}>
               {assignMsg}
             </p>
           )}
@@ -177,6 +182,43 @@ const Suspend = () => {
           </Button>
           <Button onClick={handleAssignTeam} variant="contained">
             Assign
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Image Dialog */}
+      <Dialog
+        open={imageDialogOpen}
+        onClose={() => setImageDialogOpen(false)}
+        maxWidth="md"
+        fullWidth
+        scroll="paper"
+      >
+        
+        <DialogTitle>Report Images</DialogTitle>
+        <DialogContent dividers style={{ maxHeight: "500px", overflowY: "auto" }}>
+          <div className="report-images">
+            {report.images?.user?.map((img, idx) => (
+              <img
+                key={`user-${idx}`}
+                src={`${import.meta.env.VITE_API_BASE_URL}/${img}`}
+                alt={`User image ${idx + 1}`}
+                className="report-img"
+              />
+            ))}
+            {report.images?.teams?.map((img, idx) => (
+              <img
+                key={`team-${idx}`}
+                src={`${import.meta.env.VITE_API_BASE_URL}/${img}`}
+                alt={`Team image ${idx + 1}`}
+                className="report-img"
+              />
+            ))}
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setImageDialogOpen(false)} color="primary">
+            Close
           </Button>
         </DialogActions>
       </Dialog>

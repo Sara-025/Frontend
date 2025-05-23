@@ -63,9 +63,9 @@ export function ChartAreaInteractive() {
   React.useEffect(() => {
     const fetchChartData = async () => {
       try {
-        const token = localStorage.getItem("token") // Or use your auth management logic
+        const token = localStorage.getItem("token") 
 
-        const response = await axios.get("http://10.110.15.150:3000/admin/dashboard", {
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/dashboard`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-
 import { ChartAreaInteractive } from "@/components/chart-area-interactive";
 import { Component } from "@/components/pie-chart";
 import {
@@ -56,7 +55,7 @@ useEffect(() => {
     }
 
     try {
-      const response = await axios.get('http://10.110.15.150:3000/admin/dashboard', {
+      const response = await  axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/dashboard`, {
         headers: {
           Authorization: `Bearer ${token}`, 
         },
@@ -106,15 +105,12 @@ useEffect(() => {
           <div className="max-w-7xl mx-auto px-4" id="overview">
             <ChartAreaInteractive  />
           </div>
-
           
-          <div style={{ width: "500px" }} id="teams">
+          <div className="max-w-7xl mx-auto px-4" id="teams">
             <Component />
           </div>
-
-        
           <div>
-            <Table id="resolved">
+            <Table className="max-w-7xl mx-auto px-4" id="resolved">
               <TableCaption>A list of recent reports</TableCaption>
               <TableHeader>
                 <TableRow>

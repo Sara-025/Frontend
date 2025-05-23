@@ -58,7 +58,7 @@ export function Component() {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("adminToken") 
-        const res = await axios.get("http://10.110.15.150:3000/admin/dashboard", {
+        const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/dashboard`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

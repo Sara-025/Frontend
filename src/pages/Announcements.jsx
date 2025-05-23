@@ -33,7 +33,7 @@ const Announcements = () => {
 
   const fetchAnnouncements = async () => {
     try {
-      const response = await axios.get('http://10.110.15.150:3000/admin/announcement', {
+      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/announcement`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
         }
@@ -78,7 +78,7 @@ const Announcements = () => {
         return;
       }
 
-      const response = await axios.post('http://10.110.15.150:3000/admin/announcement', {
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/admin/announcement`, {
         title: newTitle,
         content: newContent,
         isglobal: isglobal
