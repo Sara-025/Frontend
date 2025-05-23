@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './SidebarPart.css'; 
-import Logo from "../assets/5791991307256842482_121-removebg-preview (1).png";
+import Logo from "../assets/photo_2025-05-23_21-50-16-removebg-preview.png";
 import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
 import PeopleIcon from '@mui/icons-material/People';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -47,6 +47,7 @@ const Sidebar = () => {
     <div className="sidebar">
       <div className="sidebar-header">
         <img src={Logo} alt="logo" className="logo" />
+        <h2> FixSpot</h2>
       </div>
       <div className="sidebar-menu">
         {menuItems.map((item, index) => {

@@ -12,8 +12,13 @@
 
 .sidebar-header {
   display: flex;
-  justify-content: center;
   align-items: center;
+  padding:10px 0 10px 15px;
+}
+.sidebar-header h2{
+  font-size: 25px;
+  font-weight: 600;
+  padding: 0;
 }
 
 .sidebar-menu {
@@ -68,7 +73,8 @@
 }
 
 .logo {
-  width: 230px;
+  width: 70px;
   height: auto;
-  margin-bottom: 10px;
+  padding-top: 5px;
+  
 }
