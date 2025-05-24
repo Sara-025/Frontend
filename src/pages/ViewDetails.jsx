@@ -16,7 +16,6 @@ import Snackbar from "@mui/material/Snackbar";
 const ViewDetails = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
   const report = location.state?.report;
 
   const [teamOpen, setTeamOpen] = useState(false);
@@ -24,51 +23,21 @@ const ViewDetails = () => {
   const [assignMsg, setAssignMsg] = useState('');
   const [assigning, setAssigning] = useState(false);
   const [imageDialogOpen, setImageDialogOpen] = useState(false);
-
-
-
   const [markingDuplicate, setMarkingDuplicate] = useState(false);
-const [duplicateMsg, setDuplicateMsg] = useState("");
-const [snackbar, setSnackbar] = useState({
-  open: false,
-  message: "",
-  severity: "success", 
-});
-
-const handleMarkAsDuplicate = () => {
-  setMarkingDuplicate(true);
-  axios
-    .post(
-      `${import.meta.env.VITE_API_BASE_URL}/admin/duplicate`,
-      { reportid: report.id },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
-        },
-      }
-    )
-    .then(() => {
-      setSnackbar({
-        open: true,
-        message: "Report marked as duplicate.",
-        severity: "success",
-      });
-      setMarkingDuplicate(false);
-    })
-    .catch(() => {
-      setSnackbar({
-        open: true,
-        message: "Failed to mark report as duplicate.",
-        severity: "error",
-      });
-      setMarkingDuplicate(false);
-    });
-};
-
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   if (!report) return <div>Missing report data. Please go back and try again.</div>;
 
-  const user = report.user 
+  const user = report.user;
+  const isMaybeDuplicate = report.status === "MAYBEDUPLICATE";
+  const isDuplicateOrAssigned = report.status === "DUPLICATE" || report.teamId !== null;
+
+  const getFullImageUrl = (imgPath) => `${import.meta.env.VITE_API_BASE_URL}/${imgPath}`;
+
   const handleLocationClick = () => {
     navigate(
       `/Locations?loc=${encodeURIComponent(report.location || "N/A")}&lat=${report.lat || "N/A"}&lng=${report.lon || "N/A"}`
@@ -92,19 +61,15 @@ const handleMarkAsDuplicate = () => {
       return;
     }
     setAssigning(true);
-    axios
-      .post(
-       ` ${import.meta.env.VITE_API_BASE_URL}/admin/assign-report`,
-        {
-          reportid: report.id,
-          teamid: parseInt(teamId),
+    axios.post(
+      `${import.meta.env.VITE_API_BASE_URL}/admin/assign-report`,
+      { reportid: report.id, teamid: parseInt(teamId) },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
-          },
-        }
-      )
+      }
+    )
       .then(() => {
         setAssignMsg("Team assigned successfully.");
         setAssigning(false);
@@ -120,14 +85,44 @@ const handleMarkAsDuplicate = () => {
       });
   };
 
-  const isMaybeDuplicate = report.status === "MAYBEDUPLICATE";
+  const handleMarkAsDuplicate = () => {
+    setMarkingDuplicate(true);
+    axios.post(
+      `${import.meta.env.VITE_API_BASE_URL}/admin/duplicate`,
+      { reportid: report.id },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+        },
+      }
+    )
+      .then(() => {
+        setSnackbar({
+          open: true,
+          message: "Report marked as duplicate.",
+          severity: "success",
+        });
+        setMarkingDuplicate(false);
+      })
+      .catch(() => {
+        setSnackbar({
+          open: true,
+          message: "Failed to mark report as duplicate.",
+          severity: "error",
+        });
+        setMarkingDuplicate(false);
+      });
+  };
+
+  const userImages = Array.isArray(report.images?.user) ? report.images.user : [];
+  const teamImages = Array.isArray(report.images?.teams) ? report.images.teams : [];
 
   return (
     <div className="report-container">
       <h3>View Account</h3>
       <div className="Main">
         <div className="report-field">
-          <p>Full name :</p>
+          <p>Full name:</p>
           <input type="text" value={user.fullname || "N/A"} readOnly />
         </div>
 
@@ -163,7 +158,7 @@ const handleMarkAsDuplicate = () => {
         </div>
 
         <div className="report-field">
-          <p>Image Preview:</p>
+          <p>Images:</p>
           <button
             onClick={() => setImageDialogOpen(true)}
             style={{
@@ -179,12 +174,11 @@ const handleMarkAsDuplicate = () => {
             }}
           >
             <ImageIcon />
-            View Image
+            View Images
           </button>
         </div>
       </div>
 
-      {/* Bottom Buttons */}
       <div className="setTeam" style={{ display: 'flex', gap: '10px' }}>
         <button
           onClick={openSetTeam}
@@ -215,27 +209,22 @@ const handleMarkAsDuplicate = () => {
           Go Back
         </button>
       </div>
+
       <button
         onClick={handleMarkAsDuplicate}
-        disabled={report.status === "DUPLICATE" || report.teamId !== null}
+        disabled={isDuplicateOrAssigned}
         style={{
-          backgroundColor:
-            report.status === "DUPLICATE" || report.teamId !== null
-              ? "#ccc"
-              : "#f44336",
+          backgroundColor: isDuplicateOrAssigned ? "#ccc" : "#f44336",
           color: "white",
           padding: "10px 20px",
           border: "none",
           borderRadius: "5px",
-          cursor:
-            report.status === "DUPLICATE" || report.teamId !== null
-              ? "not-allowed"
-              : "pointer",
+          cursor: isDuplicateOrAssigned ? "not-allowed" : "pointer",
+          marginTop: "10px"
         }}
       >
         {markingDuplicate ? "Marking..." : "Mark as Duplicate"}
       </button>
-
 
       {/* Assign Team Dialog */}
       <Dialog open={teamOpen} onClose={closeSetTeam}>
@@ -251,12 +240,10 @@ const handleMarkAsDuplicate = () => {
             disabled={assigning}
           />
           {assignMsg && (
-            <p
-              style={{
-                marginTop: '10px',
-                color: assignMsg.includes("Failed") ? 'red' : 'green',
-              }}
-            >
+            <p style={{
+              marginTop: '10px',
+              color: assignMsg.includes("Failed") ? 'red' : 'green',
+            }}>
               {assignMsg}
             </p>
           )}
@@ -272,35 +259,50 @@ const handleMarkAsDuplicate = () => {
       {/* Image Preview Dialog */}
       <Dialog open={imageDialogOpen} onClose={() => setImageDialogOpen(false)} maxWidth="md" fullWidth>
         <DialogTitle>Image Preview</DialogTitle>
-        <DialogContent>
-          <img
-            src={report.images.user}
-            alt="Report"
-            style={{ width: '100%', maxHeight: '500px', objectFit: 'contain' }}
-          />
+        <DialogContent dividers>
+          <h4>User Images:</h4>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+            {userImages.map((img, index) => (
+              <img
+                key={`user-${index}`}
+                src={getFullImageUrl(img)}
+                alt={`User img ${index}`}
+                style={{ width: '100%', maxWidth: '300px', objectFit: 'contain' }}
+              />
+            ))}
+          </div>
+          <h4 style={{ marginTop: '20px' }}>Team Images:</h4>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+            {teamImages.map((img, index) => (
+              <img
+                key={`team-${index}`}
+                src={getFullImageUrl(img)}
+                alt={`Team img ${index}`}
+                style={{ width: '100%', maxWidth: '300px', objectFit: 'contain' }}
+              />
+            ))}
+          </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setImageDialogOpen(false)}>Close</Button>
         </DialogActions>
       </Dialog>
-      <Snackbar
-  open={snackbar.open}
-  autoHideDuration={4000}
-  onClose={() => setSnackbar({ ...snackbar, open: false })}
-  anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
->
-  <div
-    style={{
-      backgroundColor: snackbar.severity === "success" ? "#4caf50" : "#f44336",
-      color: "#fff",
-      padding: "10px 16px",
-      borderRadius: "4px",
-    }}
-  >
-    {snackbar.message}
-  </div>
-</Snackbar>
 
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <div style={{
+          backgroundColor: snackbar.severity === "success" ? "#4caf50" : "#f44336",
+          color: "#fff",
+          padding: "10px 16px",
+          borderRadius: "4px",
+        }}>
+          {snackbar.message}
+        </div>
+      </Snackbar>
     </div>
   );
 };
