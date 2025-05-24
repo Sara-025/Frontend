@@ -27,7 +27,7 @@ const Teams = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [teams, setTeams] = useState([]);
-  const [newTeam, setNewTeam] = useState({   
+  const [newTeam, setNewTeam] = useState({
     phonenumber: "",
     password: "",
   });
@@ -90,13 +90,15 @@ const Teams = () => {
       if (response.status === 200) {
         setSnackbar({
           open: true,
-          message: "Your team was added successfully",
+          message: "Team added successfully",
           severity: "success",
         });
 
+        // Refresh team list
         await fetchTeams();
 
-        setNewTeam({  phonenumber: "", password: "" });
+        // Reset dialog and inputs
+        setNewTeam({ phonenumber: "", password: "" });
         setAddDialogOpen(false);
       } else {
         throw new Error("Unexpected response status");
@@ -116,8 +118,8 @@ const Teams = () => {
   const filteredTeams = teams.filter(
     (team) =>
       (team.name || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-      team.phonenumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      team.region.toLowerCase().includes(searchQuery.toLowerCase())
+      (team.phonenumber || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (team.region || "").toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -163,6 +165,7 @@ const Teams = () => {
             Add Team
           </Button>
         </Box>
+
         <Box sx={{ flex: 1, p: 2 }}>
           <DataGrid
             rows={filteredTeams}
@@ -196,6 +199,8 @@ const Teams = () => {
             ]}
             disableColumnMenu
             hideFooterSelectedRowCount
+            autoHeight
+            hideFooterPagination
             sx={{
               "& .MuiDataGrid-columnHeaders": {
                 backgroundColor: "#f5f5f5",
@@ -204,8 +209,6 @@ const Teams = () => {
                 overflowX: "hidden !important",
               },
             }}
-            autoHeight
-            hideFooterPagination
           />
         </Box>
 
