@@ -24,11 +24,12 @@ const Sidebar = () => {
     setLogoutDialogOpen(true);
   };
 
-  const handleLogoutConfirm = () => {
-    setLogoutDialogOpen(false);
-    
-    navigate('/Login');
-  };
+
+const handleLogoutConfirm = () => {
+  setLogoutDialogOpen(false);
+  localStorage.removeItem("adminToken");
+  navigate('/Login');
+};
 
   const handleLogoutCancel = () => {
     setLogoutDialogOpen(false);
