@@ -25,18 +25,16 @@ const Reports = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
 
-  
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_API_BASE_URL}/admin/report`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("adminToken")}`, 
+          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
         },
       })
       .then((res) => {
         setReports(res.data);
         console.log(res.data);
-        
       })
       .catch((err) => {
         setSnackbar({
@@ -49,6 +47,7 @@ const Reports = () => {
 
   const navigateToviewDetails = (report) => {
     navigate(`/reports/${report.id}`, { state: { report } });
+
   };
 
   const handleMarkAsDuplicate = (reportId) => {
@@ -159,7 +158,6 @@ const Reports = () => {
                     >
                       View Details
                     </button>
-                  
                   </TableCell>
                 </TableRow>
               ))}
@@ -172,6 +170,7 @@ const Reports = () => {
           {snackbar.message}
         </Alert>
       </Snackbar>
+      
     </div>
   );
 };

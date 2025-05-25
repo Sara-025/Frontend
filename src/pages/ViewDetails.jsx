@@ -1,6 +1,6 @@
 import './viewDetailsStyle.css';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useState } from 'react';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import ImageIcon from '@mui/icons-material/Image';
 import {
@@ -16,8 +16,8 @@ import Snackbar from "@mui/material/Snackbar";
 const ViewDetails = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const report = location.state?.report;
-
+  const params = useParams();
+  const [report, setReport] = useState(location.state?.report || null);
   const [teamOpen, setTeamOpen] = useState(false);
   const [teamId, setTeamId] = useState('');
   const [assignMsg, setAssignMsg] = useState('');
@@ -29,6 +29,23 @@ const ViewDetails = () => {
     message: "",
     severity: "success",
   });
+
+  useEffect(() => {
+    if (!report && params.id) {
+      axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/report/${params.id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+        },
+      })
+        .then((res) => {
+          setReport(res.data);
+          console.log("Fetched report:", res.data);
+        })
+        .catch((err) => {
+          console.error("Failed to fetch report:", err);
+        });
+    }
+}, [params.id]);;
 
   if (!report) return <div>Missing report data. Please go back and try again.</div>;
 
@@ -226,7 +243,6 @@ const ViewDetails = () => {
         {markingDuplicate ? "Marking..." : "Mark as Duplicate"}
       </button>
 
-      {/* Assign Team Dialog */}
       <Dialog open={teamOpen} onClose={closeSetTeam}>
         <DialogTitle>Assign Team</DialogTitle>
         <DialogContent>
@@ -256,7 +272,6 @@ const ViewDetails = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Image Preview Dialog */}
       <Dialog open={imageDialogOpen} onClose={() => setImageDialogOpen(false)} maxWidth="md" fullWidth>
         <DialogTitle>Image Preview</DialogTitle>
         <DialogContent dividers>

@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/toggle-group"
 
 const chartConfig = {
-  visitors: {
+  number: {
     label: "Number of reports",
   },
   reported: {
