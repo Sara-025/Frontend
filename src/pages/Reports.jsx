@@ -46,7 +46,8 @@ const Reports = () => {
   }, []);
 
   const navigateToviewDetails = (report) => {
-    navigate(`/reports/${report.id}`, { state: { report } });
+    // navigate(`/reports/${report.id}`, { state: { report } });
+    window.open(`/reports/${report.id}`, '_blank');
 
   };
 

@@ -29,9 +29,11 @@ const ViewDetails = () => {
     message: "",
     severity: "success",
   });
-
   useEffect(() => {
-    if (!report && params.id) {
+    console.log(`${import.meta.env.VITE_API_BASE_URL}/admin/report/${params.id}`)
+    if ( params.id) {
+
+      
       axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/report/${params.id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
@@ -45,7 +47,7 @@ const ViewDetails = () => {
           console.error("Failed to fetch report:", err);
         });
     }
-}, [params.id]);;
+}, []);
 
   if (!report) return <div>Missing report data. Please go back and try again.</div>;
 
